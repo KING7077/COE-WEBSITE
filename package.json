@@ -1,7 +1,0 @@
-{
-  "name": "static-routing-app",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "echo 'Deploying static dist folder'"
-  }
-}
