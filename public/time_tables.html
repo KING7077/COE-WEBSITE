@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Tables - Computational Engineering</title>
+  <link href="./assets/images/iithlogo.png" rel="icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <site-header></site-header>
+  <main>
+    <div class="page-hero">
+      <h1 class="page-hero-title">Time Tables</h1>
+      <p class="page-hero-subtitle">July - November 2026 Schedules</p>
+    </div>
+
+    <div class="container" style="max-width: 1240px; margin: 0 auto; padding: var(--space-8) var(--space-4);">
+      
+      <!-- Semester tabs -->
+      <div id="sem-tabs" style="display: flex; gap: var(--space-2); flex-wrap: wrap; justify-content: center; margin-bottom: var(--space-6);">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="card-modern" style="padding: var(--space-6);">
+        <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--amber-500); flex-shrink: 0;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <h3 id="table-title" style="font-weight: 800; margin: 0; color: var(--color-text); font-size: var(--text-xl); font-family: var(--font-display);">
+            — Timetable
+          </h3>
+        </div>
+        <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-5);">
+          Each day is split into three sub-columns: <strong>1–2</strong>, <strong>3–4</strong>, <strong>5–6</strong> (segment pairs). Courses spanning multiple segments are visually merged. AN = afternoon lab block.
+        </p>
+
+        <div class="table-wrapper">
+          <table style="min-width: 1050px; border-collapse: collapse; width: 100%;">
+            <thead id="table-head">
+              <!-- Static headers rendered by JS initially -->
+            </thead>
+            <tbody id="table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="unscheduled-container"></div>
+        <div id="alert-container"></div>
+
+        <div style="margin-top: var(--space-6);">
+          <a href="./assets/files/IITH-Academic-Calendar-Jan-Apr-2026.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Download Academic Calendar
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <site-footer></site-footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="components.js"></script>
+  <script src="parsed_timetables.js"></script>
+  <script>
+    let activeSem = 'sem1';
+    let data = null;
+
+    const EMPTY = `<span style="color: var(--color-text-muted); font-size: 0.7em;">—</span>`;
+    const TD_STYLE = `padding: 4px 3px; vertical-align: top; border-right: 1px dashed var(--color-border);`;
+
+    function renderCourseChip(course) {
+      if (!course) return '';
+      let chip = `<div style="background: rgba(245,158,11,0.08); border-left: 3px solid var(--amber-500); border-radius: 3px; padding: 4px 6px; text-align: left;">`;
+      chip += `<div style="font-weight: 700; color: var(--amber-700); font-size: 0.72em;">${course.code}</div>`;
+      chip += `<div style="color: var(--color-text); font-weight: 500; font-size: 0.78em; line-height: 1.3;">${course.name}</div>`;
+      if (course.seg) {
+        chip += `<div style="display: inline-block; background: var(--amber-500); color: #fff; font-weight: 700; font-size: 0.62em; border-radius: 3px; padding: 1px 5px; margin-top: 3px;">Seg ${course.seg}</div>`;
+      }
+      if (course.room) {
+        chip += `<div style="color: var(--color-text-muted); font-size: 0.68em; margin-top: 2px;">${course.room}</div>`;
+      }
+      chip += `</div>`;
+      return chip;
+    }
+
+    function isSame(c1, c2) {
+      if (!c1 && !c2) return true;
+      if (!c1 || !c2) return false;
+      return c1.code === c2.code && c1.name === c2.name;
+    }
+
+    function renderSegCells(sd) {
+      if (!sd) {
+        return `
+          <td style="${TD_STYLE}">${EMPTY}</td>
+          <td style="${TD_STYLE}">${EMPTY}</td>
+          <td style="${TD_STYLE}">${EMPTY}</td>
+        `;
+      }
+      const { s12, s34, s56 } = sd;
+
+      if (isSame(s12, s34) && isSame(s34, s56) && s12) {
+        return `<td colspan="3" style="${TD_STYLE}">${renderCourseChip(s12)}</td>`;
+      }
+      if (isSame(s12, s34) && s12) {
+        return `
+          <td colspan="2" style="${TD_STYLE}">${renderCourseChip(s12)}</td>
+          <td style="${TD_STYLE}">${s56 ? renderCourseChip(s56) : EMPTY}</td>
+        `;
+      }
+      if (isSame(s34, s56) && s34) {
+        return `
+          <td style="${TD_STYLE}">${s12 ? renderCourseChip(s12) : EMPTY}</td>
+          <td colspan="2" style="${TD_STYLE}">${renderCourseChip(s34)}</td>
+        `;
+      }
+      return `
+        <td style="${TD_STYLE}">${s12 ? renderCourseChip(s12) : EMPTY}</td>
+        <td style="${TD_STYLE}">${s34 ? renderCourseChip(s34) : EMPTY}</td>
+        <td style="${TD_STYLE}">${s56 ? renderCourseChip(s56) : EMPTY}</td>
+      `;
+    }
+
+    function setActiveSem(semId) {
+      activeSem = semId;
+      render();
+    }
+
+    function render() {
+      if (!data) return;
+
+      const { semesters, SLOT_DATA, AN_BLOCKS, GRID_ROWS, unscheduled, DAYS } = data;
+
+      // Render Tabs
+      const tabsHtml = semesters.map(s => {
+        const cls = activeSem === s.id ? 'btn-primary' : 'btn-outline';
+        return `<button class="btn ${cls} btn-sm" onclick="setActiveSem('${s.id}')">${s.label}</button>`;
+      }).join('');
+      document.getElementById('sem-tabs').innerHTML = tabsHtml;
+
+      // Update title
+      const currentSem = semesters.find(s => s.id === activeSem);
+      document.getElementById('table-title').innerText = `${currentSem ? currentSem.label : ''} — Timetable`;
+
+      // Render Table Head
+      let headHtml = `
+        <tr>
+          <th rowspan="2" style="text-align: center; vertical-align: middle; padding: 8px 6px; min-width: 80px;">Time</th>
+          ${DAYS.map(d => `<th colspan="3" style="text-align: center; padding: 8px 4px; border-left: 2px solid rgba(255,255,255,0.25);">${d}</th>`).join('')}
+        </tr>
+        <tr>
+          ${DAYS.map(d => 
+            ['1–2','3–4','5–6'].map((seg, si) => `
+              <th style="text-align: center; font-size: 0.68em; font-weight: 600; padding: 4px 3px; border-left: ${si === 0 ? '2px solid rgba(255,255,255,0.25)' : '1px dashed rgba(255,255,255,0.3)'}; color: rgba(255,255,255,0.7); white-space: nowrap;">${seg}</th>
+            `).join('')
+          ).join('')}
+        </tr>
+      `;
+      document.getElementById('table-head').innerHTML = headHtml;
+
+      // Render Table Body
+      const slotData = SLOT_DATA[activeSem] || {};
+      const anBlocks = AN_BLOCKS[activeSem] || {};
+      let bodyHtml = '';
+      const anRowSpanConsumed = new Set();
+
+      GRID_ROWS.forEach(row => {
+        if (row.isBreak) {
+          bodyHtml += `
+            <tr style="background: var(--navy-50);">
+              <td style="text-align: center; padding: 7px 4px;">
+                <strong style="font-size: 0.75em;">${row.time}</strong>
+              </td>
+              <td colspan="15" style="text-align: center; font-weight: 700; letter-spacing: 2px; color: var(--navy-700); font-size: 0.82em;">
+                LUNCH BREAK
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        let rowHtml = `
+          <tr>
+            <td style="text-align: center; font-weight: 700; font-size: 0.72em; color: var(--color-text-muted); padding: 6px 4px; vertical-align: middle; white-space: nowrap; border-right: 2px solid var(--color-border);">
+              ${row.time}
+            </td>
+        `;
+
+        DAYS.forEach(day => {
+          const slotLetter = row[day];
+          const anCourse = anBlocks[day];
+          const consumedKey = `${day}-AN`;
+
+          if (anCourse && (row.isAN1 || row.isAN2)) {
+            if (row.isAN1) {
+              anRowSpanConsumed.add(consumedKey);
+              if (anCourse === 'SEM7_LAB') {
+                rowHtml += `
+                  <td rowspan="2" colspan="3" style="vertical-align: middle; background: rgba(245,158,11,0.05); border-left: 3px solid var(--amber-400); text-align: center; padding: 8px 6px;">
+                    <div style="font-weight: 700; font-size: 0.72em; color: var(--amber-600); margin-bottom: 4px;">LAB BLOCK (14:30–17:25)</div>
+                    <div style="margin-bottom: 4px;">${renderCourseChip({ code: 'ME3445', name: 'FEM Lab', room: 'LHC-7', seg: '1–3' })}</div>
+                    <div>${renderCourseChip({ code: 'ME3455', name: 'CFD Lab', room: 'LHC-7', seg: '4–6' })}</div>
+                  </td>
+                `;
+              } else {
+                rowHtml += `
+                  <td rowspan="2" colspan="3" style="vertical-align: middle; background: rgba(245,158,11,0.05); border-left: 3px solid var(--amber-400); padding: 6px;">
+                    <div style="font-weight: 700; font-size: 0.72em; color: var(--amber-600); margin-bottom: 4px;">LAB BLOCK</div>
+                    ${renderCourseChip(anCourse)}
+                  </td>
+                `;
+              }
+            }
+            return;
+          }
+
+          if (!slotLetter || slotLetter === 'AN' || slotLetter === '') {
+            rowHtml += `
+              <td style="${TD_STYLE}">${EMPTY}</td>
+              <td style="${TD_STYLE}">${EMPTY}</td>
+              <td style="${TD_STYLE}">${EMPTY}</td>
+            `;
+            return;
+          }
+
+          const sd = slotData[slotLetter] || null;
+          rowHtml += renderSegCells(sd);
+        });
+
+        rowHtml += `</tr>`;
+        bodyHtml += rowHtml;
+      });
+
+      document.getElementById('table-body').innerHTML = bodyHtml;
+
+      // Render Unscheduled / Electives
+      const unsch = unscheduled[activeSem] || [];
+      if (unsch.length > 0) {
+        document.getElementById('unscheduled-container').innerHTML = `
+          <div style="margin-top: var(--space-6);">
+            <div class="eyebrow" style="margin-bottom: var(--space-3);">Additional / Elective Courses</div>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);">
+              ${unsch.map(c => `
+                <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); min-width: 160px;">
+                  <div style="font-weight: 700; font-size: 0.8em; color: var(--amber-600);">${c.code}</div>
+                  <div style="font-size: 0.85em; color: var(--color-text);">${c.name}</div>
+                  <div style="font-size: 0.75em; color: var(--color-text-muted);">${c.credits} credit${c.credits !== 1 ? 's' : ''}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        document.getElementById('unscheduled-container').innerHTML = '';
+      }
+
+      // Render Alert
+      if (activeSem === 'sem5') {
+        document.getElementById('alert-container').innerHTML = `
+          <div style="margin-top: var(--space-5); background: var(--amber-50); border: 1px solid var(--amber-300); border-radius: var(--radius-md); padding: var(--space-3) var(--space-5); font-size: var(--text-sm); color: var(--navy-800);">
+            ⚠️ Pick one course from the Parallel, Distributed &amp; HPC Basket (mandatory — either odd or even semester)
+          </div>
+        `;
+      } else {
+        document.getElementById('alert-container').innerHTML = '';
+      }
+    }
+
+    data = TIMETABLES_DATA;
+    render();
+  </script>
+</body>
+</html>

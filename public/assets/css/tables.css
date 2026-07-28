@@ -1,0 +1,105 @@
+/* ==========================================================================
+   tables.css — Curriculum & related page table styles
+   Base table styles now in styles.css. This file holds curriculum-specific overrides.
+   ========================================================================== */
+
+/* Brochure download button area */
+.brochure {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: var(--space-8) 0;
+}
+
+/* Legacy class compat */
+.flyer-btn,
+.curriculum-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.6875rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+.flyer-btn:hover,
+.curriculum-btn:hover {
+  background: linear-gradient(135deg, var(--amber-400), var(--amber-500));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  color: #fff;
+}
+
+/* Table section spacing */
+.tables-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  margin-top: var(--space-8);
+}
+
+.table-section { animation: fadeIn 0.5s var(--ease-out); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Override .section-title in tables context to not clash with page-level */
+.tables-wrapper .section-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--navy-800);
+  border-bottom: 3px solid var(--amber-500);
+  display: inline-block;
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+/* Info grid for nomenclature/electives */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  margin: var(--space-10) 0;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .info-grid { grid-template-columns: 1fr; }
+}
+
+.info-grid-left { display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+.info-grid-right { display: flex; flex-direction: column; min-width: 0; }
+
+/* Program intro box */
+.initial {
+  background: var(--navy-50);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-8);
+  border-left: 4px solid var(--amber-500);
+  box-shadow: var(--shadow-xs);
+}
+.initial p {
+  text-align: justify;
+  line-height: 1.8;
+  color: var(--color-text-body);
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+/* Course listing container */
+.courses {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}

@@ -1,24 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Computational Engineering Programme at IIT Hyderabad - India's first undergraduate program bridging engineering and computation">
-    <title>CO Programme, IIT Hyderabad</title>
-    <link href="./assets/images/iithlogo.png" rel="icon">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script type="module" crossorigin src="./assets/index-DUUBrrUB.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-541jbYzh.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Computational Engineering</title>
+  <link href="./assets/images/iithlogo.png" rel="icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="root"></div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <site-header></site-header>
+  <main>
+    <!-- ── Hero ────────────────────────────────────────────────────────── -->
+    <div class="background">
+      <img
+        class="backgroundimage"
+        src="./assets/images/IMG_0183.jpeg"
+        alt="IIT Hyderabad Campus"
+      />
+      <div class="overlay-text">
+        <h2 class="title">IIT Hyderabad</h2>
+        <h3 class="subtitle">
+          <strong><span id="typewriter-text"></span><span class="cursor-blink">|</span></strong>
+        </h3>
+        <h3 class="branch">Computational Engineering</h3>
+
+        <!-- Stat Badges -->
+        <div class="hero-stats">
+          <div class="stat-badge">
+            <span class="stat-badge-number">7th</span>
+            <span class="stat-badge-label">NIRF Overall Rank</span>
+          </div>
+          <div class="stat-badge">
+            <span class="stat-badge-number">6th</span>
+            <span class="stat-badge-label">Innovation Category</span>
+          </div>
+          <div class="stat-badge">
+            <span class="stat-badge-number">15th</span>
+            <span class="stat-badge-label">Research Category</span>
+          </div>
+          <div class="stat-badge">
+            <span class="stat-badge-number">2021</span>
+            <span class="stat-badge-label">Programme Started</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── About IITH ──────────────────────────────────────────────────── -->
+    <div id="aboutiith" class="aboutiith">
+      <div class="container iith">
+        <div class="eyebrow" style="margin-bottom: var(--space-3)">
+          Indian Institute of Technology
+        </div>
+        <h3 class="section-title text-gradient-light" style="margin-bottom: var(--space-4)">
+          About IITH
+        </h3>
+        <p>
+          The Indian Institute of Technology Hyderabad (IITH) is a premier institute known for its strong emphasis on research, innovation, and interdisciplinary learning.
+        </p>
+        <p>
+          Offering a wide range of undergraduate, postgraduate, and doctoral programs, IITH empowers students through a flexible academic structure, cutting-edge research, and strong industry connections. The institute fosters entrepreneurship through specialized programs and close collaboration with industry leaders.
+        </p>
+        <p>
+          A unique partnership with Japanese institutions has further enriched IITH's academic and infrastructural development, contributing to its global outlook. IITH provides a vibrant ecosystem that encourages intellectual growth, creativity, and socially relevant innovation.
+        </p>
+        <p style="margin-bottom: 0">
+          Ranked <strong class="text-gradient-inverse">7th</strong> in India by the National Institutional Ranking Framework (NIRF), the institute continues to inspire future leaders in science, technology, and beyond. Ranked <strong class="text-gradient-inverse">6th</strong> in the Innovation Category and <strong class="text-gradient-inverse">15th</strong> in Research and Overall Category.
+        </p>
+        <div style="margin-top: var(--space-6)">
+          <a
+            href="https://www.iith.ac.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Discover More About IITH →
+          </a>
+        </div>
+      </div>
+      <div class="iithimage">
+        <img src="./assets/images/tower.jpg" alt="IIT Hyderabad Tower Building" />
+      </div>
+    </div>
+
+    <!-- ── About COE ───────────────────────────────────────────────────── -->
+    <div id="aboutcoe" class="div-2">
+      <div class="container card-content">
+        <h3 class="section-title text-gradient-light" style="margin-bottom: var(--space-4)">
+          Computational Engineering
+        </h3>
+        <p>
+          Computational Engineering at IIT Hyderabad, launched in 2021, is
+          <strong class="text-gradient-inverse">India's first undergraduate program</strong>
+          dedicated to bridging the gap between traditional engineering education and the computational demands of modern industry. With the rise of Industry 4.0 and increasing reliance on digital simulations, AI, and automation, the program is designed to develop engineers fluent in both core engineering principles and advanced computational tools.
+        </p>
+        <p>
+          This interdisciplinary BTech program is built on four foundational pillars:
+          <strong class="text-gradient-inverse">Applied Mathematics, Core Engineering, Data Structures &amp; Analytics, and Computational Applications.</strong> Students undergo rigorous training in scientific computing, numerical methods, machine learning, optimization, and hardware description languages.
+        </p>
+        <p style="margin-bottom: 0">
+          The curriculum is structured in a T-shape, offering strong domain breadth while enabling specialization in computational techniques, ensuring that students can develop, simulate, and analyze engineering systems effectively. The program emphasizes real-world problem solving, digital twin creation, and systems-level modeling. Graduates are equipped with the skills required to
+          <strong class="text-gradient-inverse">drive innovation in sectors such as aerospace, energy, healthcare, manufacturing, finance, and data science.</strong> With its unique blend of interdisciplinary education and practical relevance, the Computational Engineering program at IITH prepares students for leadership roles in academia, research, and industry.
+        </p>
+      </div>
+      <div class="card-side-image-container">
+        <div class="card-side-image">
+          <img
+            src="./assets/images/curr_1.jpg"
+            alt="Computational Engineering interdisciplinary pillars diagram"
+          />
+        </div>
+        <div class="card-bottom-image">
+          <img
+            src="./assets/images/curr_2.jpg"
+            alt="Computational Engineering students working on projects"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Announcements & Slideshow ────────────────────────────────────── -->
+    <div id="announcements" class="screen-split">
+      <div class="slider-section">
+        <div class="slider">
+          <div class="slides">
+            <button class="prev" aria-label="Previous slide" onclick="prevSlide()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+
+            <img class="slide displaySlide" src="./assets/images/p1.jpg" alt="Campus event photo 1" />
+            <img class="slide" src="./assets/images/p2.jpg" alt="Campus event photo 2" />
+            <img class="slide" src="./assets/images/IMG_0182.jpeg" alt="Campus event photo 3" />
+
+            <button class="next" aria-label="Next slide" onclick="nextSlide()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <h3 class="card-section-title">Announcements</h3>
+        <div class="card-section-content">
+          <div class="announcement-track">
+            <div class="item">
+              <strong>
+                <span style="color: var(--amber-500); font-weight: 700">NEW</span>
+                New Website Launched:
+              </strong>
+              Official website of Computational Engineering is now live.
+            </div>
+            <div class="item">
+              <strong>Graduation:</strong> Batch of 2025 graduated successfully.
+            </div>
+            <div class="item">
+              <strong>Placements:</strong> 14 out of 15 placed from the 2026 batch.
+            </div>
+            <div class="item">
+              <strong>Admissions:</strong> Batch of 2029 is being welcomed.
+            </div>
+            <div class="item">
+              <strong>Academics:</strong> Check the academic calendar of the upcoming semester
+              <a
+                href="./assets/files/IITH-Academic-Calendar-Jan-Apr-2026.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="color: var(--amber-600); font-weight: 600"
+              >
+                here
+              </a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <site-footer></site-footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="components.js"></script>
+  <script>
+    // Typewriter Effect
+    const text = "Inventing & Innovating in Technology for Humanity";
+    const typewriterEl = document.getElementById('typewriter-text');
+    let displayText = '';
+    let isDeleting = false;
+    
+    function type() {
+      const currentLength = displayText.length;
+      
+      if (!isDeleting && currentLength < text.length) {
+        displayText = text.substring(0, currentLength + 1);
+        typewriterEl.textContent = displayText;
+        setTimeout(type, 50);
+      } else if (!isDeleting && currentLength === text.length) {
+        isDeleting = true;
+        setTimeout(type, 2000);
+      } else if (isDeleting && currentLength > 0) {
+        displayText = text.substring(0, currentLength - 1);
+        typewriterEl.textContent = displayText;
+        setTimeout(type, 30);
+      } else if (isDeleting && currentLength === 0) {
+        isDeleting = false;
+        setTimeout(type, 50);
+      }
+    }
+    
+    setTimeout(type, 50);
+
+    // Slideshow Effect
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    
+    function showSlide(index) {
+      slides.forEach((slide, idx) => {
+        if (idx === index) {
+          slide.classList.add('displaySlide');
+        } else {
+          slide.classList.remove('displaySlide');
+        }
+      });
+    }
+    
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }
+    
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+    
+    setInterval(nextSlide, 5000);
+  </script>
 </body>
 </html>
