@@ -208,7 +208,7 @@
 }
 .iithimage img {
   width: 100%;
-  aspect-ratio: 4/3;
+  height: 100%;
   object-fit: cover;
   border-radius: var(--radius-lg);
   box-shadow: 0 12px 40px rgba(0,0,0,0.4);
@@ -273,14 +273,14 @@
   box-shadow: 0 12px 35px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.08);
   transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  flex: 1;
+  min-width: 0;
 }
 .card-side-image:hover,
 .card-bottom-image:hover {
   transform: scale(1.03);
   box-shadow: 0 16px 45px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.15);
 }
-.card-side-image { flex: 0 0 auto; } /* max-height: 280px; */
-.card-bottom-image { flex: 0 0 auto; max-height: 200px; }
 
 .card-side-image img,
 .card-bottom-image img {
@@ -435,9 +435,10 @@
     width: 100%;
     max-width: 100%;
   }
-  .card-side-image-container { flex-direction: row; }
-  .card-side-image { max-height: 220px; }
-  .card-bottom-image { max-height: 220px; }
+  .card-side-image-container { 
+    flex-direction: row; 
+    align-items: flex-start;
+  }
   .iithimage img { aspect-ratio: 16/9; }
 }
 
@@ -447,5 +448,4 @@
   .aboutiith,
   .div-2 { padding: var(--space-6) var(--space-4); }
   .card-side-image-container { flex-direction: column; }
-  .card-side-image, .card-bottom-image { max-height: 220px; }
 }
