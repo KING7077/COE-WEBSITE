@@ -25,7 +25,7 @@ class SiteHeader extends HTMLElement {
             <li class="dropdown">
               <a href="#" aria-haspopup="true"><span>Academics</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-left: 2px;"><path d="m6 9 6 6 6-6"/></svg></a>
               <ul>
-                <li><a href="./assets/files/IITH-Academic-Calendar-Jan-Apr-2026.pdf" target="_blank" rel="noopener noreferrer">Academic Calendar</a></li>
+                <li><a href="./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf" target="_blank" rel="noopener noreferrer">Academic Calendar</a></li>
                 <li><a href="curriculum.html">Curriculum</a></li>
                 <li><a href="courses.html">Courses</a></li>
                 <li><a href="time_tables.html">Time Tables</a></li>
@@ -136,7 +136,7 @@ class SiteFooter extends HTMLElement {
           <div class="footer-col">
             <h4>Quick Links</h4>
             <a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer" class="footer-link">IIT Hyderabad</a>
-            <a href="./assets/files/IITH-Academic-Calendar-Jan-Apr-2026.pdf" target="_blank" rel="noopener noreferrer" class="footer-link">Academic Calendar</a>
+            <a href="./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf" target="_blank" rel="noopener noreferrer" class="footer-link">Academic Calendar</a>
             <a href="curriculum.html" class="footer-link">Curriculum</a>
             <a href="internships_placements.html" class="footer-link">Internships & Placements</a>
             <a href="faculty.html" class="footer-link">Faculty</a>
