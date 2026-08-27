@@ -1392,6 +1392,20 @@ tbody tr.total-row {
 }
 
 /* ==========================================================================
+   Internship Coordinators Section
+   ========================================================================== */
+   .internship-coordinator {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+   }
+/* ==========================================================================
+   Placement Coordinators Section
+   ========================================================================== */
+   .placement-coordinator {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+   }
+/* ==========================================================================
    COORDINATOR CARD
    ========================================================================== */
 .coordinator-card {
