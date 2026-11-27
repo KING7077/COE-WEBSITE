@@ -55,20 +55,18 @@ window.TIMETABLES = {
       "end": "15:55",
       "Mon": "P",
       "Tue": "R",
-      "Wed": "AN",
+      "Wed": "F",
       "Thu": "Q",
-      "Fri": "S",
-      "an": 1
+      "Fri": "S"
     },
     {
       "time": "16:00",
       "end": "17:25",
       "Mon": "Q",
       "Tue": "S",
-      "Wed": "AN",
+      "Wed": "",
       "Thu": "P",
-      "Fri": "R",
-      "an": 2
+      "Fri": "R"
     },
     {
       "time": "17:30",

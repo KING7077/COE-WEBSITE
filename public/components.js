@@ -165,7 +165,7 @@ class SiteFooter extends HTMLElement {
                 <span>Indian Institute of Technology Hyderabad</span>
               </div>
             </div>
-            <p class="footer-about">India's first undergraduate programme dedicated to computational engineering, launched at IIT Hyderabad in 2021.</p>
+            <p class="footer-about">India's first undergraduate program dedicated to computational engineering, launched at IIT Hyderabad in 2021.</p>
             <div class="footer-video">
               <iframe src="https://www.youtube-nocookie.com/embed/WotHf4J8kiQ?mute=1&loop=1&playlist=WotHf4J8kiQ" title="IIT Hyderabad campus tour" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
@@ -196,13 +196,13 @@ class SiteFooter extends HTMLElement {
             <div class="footer-contact">
               <div>${ICONS.mail}<span><a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a><br><a href="mailto:dugc@co.iith.ac.in">dugc@co.iith.ac.in</a></span></div>
               <div>${ICONS.phone}<span>040-2301-6670</span></div>
-              <div>${ICONS.pin}<span>Near NH-65, Sangareddy, Kandi<br>Telangana 502285, India</span></div>
+              <div>${ICONS.pin}<span>Near NH-65, Kandi, Sangareddy<br>Telangana, India 502284</span></div>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
           <div class="container">
-            <span>© ${year} Computational Engineering Programme, IIT Hyderabad. All rights reserved.</span>
+            <span>© ${year} Computational Engineering Program, IIT Hyderabad. All rights reserved.</span>
             <a href="#top" class="back-top">Back to top</a>
           </div>
         </div>

@@ -82,7 +82,7 @@ window.COURSE_INFO = {
     "note": "Listed there as CH6080"
   },
   "CS3510": {
-    "description": "History of OSs, Concurrency vs parallelism, Overview of Process management, Memory management, File systems",
+    "description": "History of OSs, Concurrency vs parallelism, Overview of Process management, Memory management, File systems.",
     "source": "IITH Courses of Study, 2019",
     "url": "https://iith.ac.in/assets/files/pdf/Courses-of-Study-Bachelors.pdf"
   },
