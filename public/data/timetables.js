@@ -96,7 +96,7 @@ window.TIMETABLES = {
       "short": "Jul–Nov 2026",
       "calendar": "./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf",
       "startMonth": 6,
-      "endMonth": 11,
+      "endMonth": 10,
       "source": "CO_Timetable_JulyNov2026.xlsx",
       "semesters": [
         {
@@ -174,7 +174,9 @@ window.TIMETABLES = {
               "instructor": "",
               "place": [
                 {
-                  "an": "Tue",
+                  "day": "Tue",
+                  "from": "14:30",
+                  "to": "17:25",
                   "seg": "16"
                 }
               ]
@@ -204,7 +206,9 @@ window.TIMETABLES = {
               "instructor": "NR Aravind",
               "place": [
                 {
-                  "an": "Wed",
+                  "day": "Wed",
+                  "from": "14:30",
+                  "to": "17:25",
                   "seg": "16"
                 }
               ],
@@ -505,7 +509,9 @@ window.TIMETABLES = {
               "instructor": "",
               "place": [
                 {
-                  "an": "Wed",
+                  "day": "Wed",
+                  "from": "14:30",
+                  "to": "17:25",
                   "seg": "13"
                 }
               ]
@@ -520,7 +526,9 @@ window.TIMETABLES = {
               "instructor": "",
               "place": [
                 {
-                  "an": "Wed",
+                  "day": "Wed",
+                  "from": "14:30",
+                  "to": "17:25",
                   "seg": "46"
                 }
               ]
@@ -722,7 +730,7 @@ window.TIMETABLES = {
       "label": "January – April 2027",
       "short": "Jan–Apr 2027",
       "calendar": null,
-      "startMonth": 12,
+      "startMonth": 11,
       "endMonth": 5,
       "source": "CO_Timetable_JanApril2027.xlsx",
       "semesters": [
@@ -801,7 +809,9 @@ window.TIMETABLES = {
               "instructor": "Anil Agarwal",
               "place": [
                 {
-                  "an": "Wed",
+                  "day": "Wed",
+                  "from": "14:30",
+                  "to": "17:25",
                   "seg": "16"
                 }
               ]
@@ -990,13 +1000,15 @@ window.TIMETABLES = {
               "code": "CS3523",
               "name": "Operating Systems II Lab",
               "credits": 0,
-              "slot": "X (Wed 2.30 - 5.30)",
+              "slot": "Wed 16:00-19:00",
               "seg": "16",
               "room": "LHC-8",
               "instructor": "Abhijit Das",
               "place": [
                 {
-                  "an": "Wed",
+                  "day": "Wed",
+                  "from": "16:00",
+                  "to": "19:00",
                   "seg": "16"
                 }
               ],

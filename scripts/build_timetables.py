@@ -29,7 +29,7 @@ TERMS = [
         "calendar": "./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf",
         # (month, day) window in which this term is the default selection
         "startMonth": 6,
-        "endMonth": 11,
+        "endMonth": 10,
     },
     {
         "id": "2027-jan",
@@ -37,7 +37,7 @@ TERMS = [
         "short": "Jan–Apr 2027",
         "file": "CO_Timetable_JanApril2027.xlsx",
         "calendar": None,
-        "startMonth": 12,
+        "startMonth": 11,
         "endMonth": 5,
     },
 ]
@@ -67,6 +67,16 @@ FIXES = {
     "Saswata & Anuj": "Saswata Bhattacharya, Anuj Goyal",
     "Saswata Bhattacharya and Anuj Goyal": "Saswata Bhattacharya, Anuj Goyal",
 }
+
+
+# Slot changes not yet reflected in the spreadsheets, keyed by
+# (spreadsheet, course code, cleaned course name).
+SLOT_OVERRIDES = {
+    ("CO_Timetable_JanApril2027.xlsx", "CS3523", "Operating Systems II Lab"): "Wed 16:00-19:00",
+}
+
+# Afternoon lab block used by "X (Wed 2.30 - 5.30)" and "AN<n>" slots.
+AN_BLOCK = ("14:30", "17:25")
 
 
 def clean(value):
@@ -107,12 +117,16 @@ def placements(slot, segment):
     slot = clean(slot)
     if not slot:
         return []
+    timed = re.fullmatch(r"(Mon|Tue|Wed|Thu|Fri) (\d{2}:\d{2})-(\d{2}:\d{2})", slot)
+    if timed:
+        day, start, end = timed.groups()
+        return [{"day": day, "from": start, "to": end, "seg": segment}]
     if "Wed" in slot or slot.upper().startswith("X"):
-        return [{"an": "Wed", "seg": segment}]
+        return [{"day": "Wed", "from": AN_BLOCK[0], "to": AN_BLOCK[1], "seg": segment}]
     an_match = re.fullmatch(r"AN(\d)", slot.upper())
     if an_match:
         day = ["Mon", "Tue", "Wed", "Thu", "Fri"][int(an_match.group(1)) - 1]
-        return [{"an": day, "seg": segment}]
+        return [{"day": day, "from": AN_BLOCK[0], "to": AN_BLOCK[1], "seg": segment}]
     multi = re.findall(r"([A-GP-SW-Z])\s*\((\d+)\)", slot)
     if multi:
         return [{"slot": letter, "seg": seg} for letter, seg in multi]
@@ -125,7 +139,7 @@ def header_index(row):
     return {clean(v).lower(): i for i, v in enumerate(row) if v is not None}
 
 
-def read_semester(ws):
+def read_semester(ws, source):
     match = re.search(r"Sem\s*(\d)", ws.title)
     batch = re.search(r"Batch\s*(\d+)", ws.title)
     sem = {
@@ -162,6 +176,7 @@ def read_semester(ws):
 
         slot = get("slot")
         seg = segment_of(get("segment"))
+        slot = SLOT_OVERRIDES.get((source, clean(get("course code")), clean(get("name"))), slot)
         course = {
             "code": clean(get("course code")),
             "name": clean(get("name")),
@@ -235,7 +250,7 @@ def build():
         semesters, electives = [], []
         for ws in wb.worksheets:
             if re.search(r"Sem\s*\d", ws.title):
-                semesters.append(read_semester(ws))
+                semesters.append(read_semester(ws, term["file"]))
             elif "elective" in ws.title.lower():
                 electives = read_electives(ws)
         semesters.sort(key=lambda s: s["number"])

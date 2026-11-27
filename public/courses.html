@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Courses | Computational Engineering, IIT Hyderabad</title>
-  <meta name="description" content="Course offerings from the Department of Computational Engineering, IIT Hyderabad.">
+  <meta name="description" content="Descriptions of the core courses, HPC basket and electives in the B.Tech in Computational Engineering at IIT Hyderabad.">
   <link rel="icon" href="./assets/images/iithlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,26 +19,186 @@
       <div class="container">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Academics</span><span aria-hidden="true">/</span><span>Courses</span></nav>
         <h1>Courses</h1>
-        <p>Course offerings from the Department of Computational Engineering</p>
+        <p>What each course in the B.Tech in Computational Engineering covers: the semester-wise core, the Parallel, Distributed &amp; HPC basket, and the electives offered this year.</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
       <div class="container">
-        <div class="soon">
-          <span class="icon-badge"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
-          <h2>Course Listings Coming Soon</h2>
-          <p>We are compiling the complete course catalog for the Computational Engineering programme. In the meantime, explore our Curriculum for course structure and credit details.</p>
-          <div class="btn-row">
-            <a href="curriculum.html" class="btn btn-primary">View Curriculum</a>
-            <a href="time_tables.html" class="btn btn-outline">Time Tables</a>
-          </div>
+        <div class="toolbar">
+          <div class="tabs" role="tablist" id="group-tabs" aria-label="Course group"></div>
+          <label class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="visually-hidden">Search courses</span>
+            <input type="search" id="course-search" placeholder="Search courses">
+          </label>
         </div>
+
+        <div id="listing"></div>
+
+        <p class="muted mt-lg" style="font-size: .82rem;">
+          Descriptions are condensed from IIT Hyderabad's <em>Courses of Study</em> and department curriculum documents; each entry links to its source.
+          Course content may change between offerings, so the instructor's course plan is the final word.
+          Credits and semesters follow the <a class="hl" href="curriculum.html">curriculum</a>; slots and rooms are on the <a class="hl" href="time_tables.html">time tables</a>.
+        </p>
       </div>
     </section>
   </main>
 
   <site-footer></site-footer>
+
   <script src="components.js"></script>
+  <script src="data/timetables.js"></script>
+  <script src="data/curriculum.js"></script>
+  <script src="data/courses.js"></script>
+  <script>
+    const TT = window.TIMETABLES;
+    const INFO = window.COURSE_INFO || {};
+    const termShort = id => TT.terms.find(t => t.id === id).short;
+    const creditOf = c => (c && typeof c === 'object' ? c.value : c);
+    const ordinal = ['First', 'Second', 'Third', 'Fourth'];
+
+    // ── Build the course list ──
+    const entries = [];
+    const byCode = {};
+    function add(entry) {
+      if (byCode[entry.code]) {
+        // Same course listed again in another term: just record the term.
+        entry.terms.forEach(t => { if (!byCode[entry.code].terms.includes(t)) byCode[entry.code].terms.push(t); });
+        return;
+      }
+      byCode[entry.code] = entry;
+      entries.push(entry);
+    }
+
+    SEMESTERS.forEach(s => s.courses.forEach(([code, name, credits, basket]) => {
+      if (code) add({ code, name, credits, basket, group: 'core', sem: s.n, section: `Semester ${s.n}`, terms: [] });
+    }));
+    TT.terms.forEach(t => {
+      t.semesters.forEach(s => (s.basket ? s.basket.courses : []).forEach(c =>
+        add({ code: c.code, name: c.name, credits: creditOf(c.credits), basket: 'DC', group: 'hpc', section: 'HPC basket', terms: [t.id] })));
+      t.electives.forEach(g => g.courses.forEach(c => {
+        const hpc = c.type === 'hpc';
+        const extra = /additional/i.test(g.title);
+        add({
+          code: c.code, name: c.name, credits: creditOf(c.credits), prereq: c.prereq,
+          basket: hpc ? 'DC' : 'DE',
+          group: hpc ? 'hpc' : extra ? 'extra' : 'de',
+          section: hpc ? 'HPC basket' : extra ? 'Additional electives' : 'Department electives',
+          terms: [t.id],
+        });
+      }));
+    });
+
+    const GROUPS = [
+      { id: 'all', label: 'All' },
+      { id: 'core', label: 'Core' },
+      { id: 'hpc', label: 'HPC basket', title: 'Parallel, Distributed & HPC Basket', lede: 'One 3-credit course from this basket, taken in either semester of the third year.' },
+      { id: 'de', label: 'Department electives', title: 'Department electives', lede: 'Offered by partner departments this academic year; 17 DE credits are needed across semesters 6–8.' },
+      { id: 'extra', label: 'Additional electives', title: 'Additional electives', lede: 'Further courses from Mechanical & Aerospace Engineering that may also be taken as electives.' },
+    ];
+
+    const params = new URLSearchParams(location.search);
+    let group = GROUPS.some(g => g.id === params.get('group')) ? params.get('group') : 'all';
+    const tabsEl = document.getElementById('group-tabs');
+    const searchEl = document.getElementById('course-search');
+
+    function card(e) {
+      const info = INFO[e.code] || {};
+      const desc = info.description
+        ? `<p class="cc-desc">${esc(info.description)}</p>`
+        : '<p class="cc-desc cc-missing">A description for this course is not available yet.</p>';
+      const when = e.group === 'core'
+        ? `Semester ${e.sem}`
+        : e.terms.map(termShort).join(', ');
+      const foot = [
+        `<span>${esc(when)}</span>`,
+        e.prereq || info.prereq ? `<span>Prerequisite: ${esc(e.prereq || info.prereq)}</span>` : '',
+        info.note ? `<span>${esc(info.note)}</span>` : '',
+        info.url ? `<a href="${esc(info.url)}" target="_blank" rel="noopener noreferrer">Source: ${esc(info.source || 'link')}</a>`
+          : info.source ? `<span>Source: ${esc(info.source)}</span>` : '',
+      ].filter(Boolean).join('');
+      return `
+        <article class="course-card" id="${esc(e.code)}">
+          <div class="cc-top">
+            <span class="code">${esc(e.code)}</span>
+            <span class="tag tag-${e.basket}" title="${esc(BASKETS[e.basket].name)}">${e.basket}</span>
+            <span class="cc-cr">${e.credits} ${e.credits === 1 ? 'credit' : 'credits'}</span>
+          </div>
+          <h3>${esc(e.name)}</h3>
+          ${desc}
+          <div class="cc-foot">${foot}</div>
+        </article>`;
+    }
+
+    function matches(e, q) {
+      if (!q) return true;
+      const info = INFO[e.code] || {};
+      return [e.code, e.name, info.description].join(' ').toLowerCase().includes(q);
+    }
+
+    function render() {
+      const q = searchEl.value.trim().toLowerCase();
+      const visible = entries.filter(e => (group === 'all' || e.group === group) && matches(e, q));
+
+      tabsEl.innerHTML = GROUPS.map(g => {
+        const n = entries.filter(e => (g.id === 'all' || e.group === g.id) && matches(e, q)).length;
+        return `<button class="tab" role="tab" type="button" aria-selected="${g.id === group}" data-group="${g.id}">${esc(g.label)}<span class="count">${n}</span></button>`;
+      }).join('');
+
+      if (!visible.length) {
+        document.getElementById('listing').innerHTML = `<div class="empty-state card">No courses match “${esc(searchEl.value)}”.</div>`;
+        return;
+      }
+
+      let html = '';
+      // Core courses, grouped by year then semester.
+      const core = visible.filter(e => e.group === 'core');
+      for (let y = 0; y < 4; y++) {
+        const sems = [y * 2 + 1, y * 2 + 2].filter(n => core.some(e => e.sem === n));
+        if (!sems.length) continue;
+        html += `<div class="year-label mt-lg"><h3>${ordinal[y]} year</h3><span class="rule"></span><span class="meta">Core</span></div>`;
+        sems.forEach(n => {
+          const term = SEMESTERS.find(s => s.n === n).term;
+          html += `<h4 class="cc-group-title">Semester ${n} <span>${term}</span></h4>
+            <div class="course-grid">${core.filter(e => e.sem === n).map(card).join('')}</div>`;
+        });
+      }
+      GROUPS.filter(g => g.title).forEach(g => {
+        const list = visible.filter(e => e.group === g.id).sort((a, b) => a.code.localeCompare(b.code));
+        if (!list.length) return;
+        html += `<div class="year-label mt-lg"><h3>${esc(g.title)}</h3><span class="rule"></span><span class="meta">${list.length} ${list.length === 1 ? 'course' : 'courses'}</span></div>
+          <p class="muted cc-lede">${esc(g.lede)}</p>
+          <div class="course-grid">${list.map(card).join('')}</div>`;
+      });
+      document.getElementById('listing').innerHTML = html;
+
+      const url = new URL(location.href);
+      if (group === 'all') url.searchParams.delete('group'); else url.searchParams.set('group', group);
+      history.replaceState(null, '', url);
+    }
+
+    // Bring a linked course (courses.html#CODE) into view once it exists.
+    function showHash() {
+      const code = decodeURIComponent(location.hash.slice(1));
+      if (!code || !byCode[code]) return;
+      if (group !== 'all' && byCode[code].group !== group) group = 'all';
+      if (searchEl.value) searchEl.value = '';
+      render();
+      const el = document.getElementById(code);
+      el.classList.add('is-linked');
+      el.scrollIntoView({ block: 'center' });
+    }
+
+    tabsEl.addEventListener('click', e => {
+      const b = e.target.closest('[data-group]');
+      if (b) { group = b.dataset.group; render(); }
+    });
+    searchEl.addEventListener('input', render);
+    window.addEventListener('hashchange', showHash);
+
+    render();
+    showHash();
+  </script>
 </body>
 </html>

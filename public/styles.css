@@ -45,8 +45,8 @@
   --c-sk: #c4457e;
   --c-fe: #6a7f2c;
 
-  --font-display: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
-  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --font-sans: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
 
   --radius-sm: 6px;
   --radius: 10px;
@@ -331,7 +331,7 @@ site-footer { display: block; }
   .nav-cta .btn { width: 100%; }
   body.nav-open { overflow: hidden; }
 }
-@media (max-width: 420px) { .brand-sub { display: none; } .brand-name { font-size: 1.05rem; } }
+@media (max-width: 420px) { .brand-sub { display: none; } .brand-name { font-size: clamp(.82rem, 3.6vw, 1rem); letter-spacing: -.02em; } }
 
 /* ── Page hero (inner pages) ──────────────────────────────────────────── */
 .page-hero {
@@ -487,6 +487,8 @@ site-footer { display: block; }
 .table tfoot td { font-weight: 600; color: var(--text); background: var(--ink-50); border-top: 1px solid var(--line); border-bottom: 0; }
 .code { font-variant-numeric: tabular-nums; font-size: .82rem; font-weight: 500; color: var(--ink-700); white-space: nowrap; }
 .code-empty { color: var(--text-faint); }
+a.code-link { text-decoration: underline; text-decoration-color: var(--ink-200); text-underline-offset: 3px; }
+a.code-link:hover { color: var(--accent-600); text-decoration-color: currentColor; }
 .sub { display: block; font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
 
 /* ── Tags ─────────────────────────────────────────────────────────────── */
@@ -678,9 +680,13 @@ site-footer { display: block; }
 .tt-head h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
 .tt-head .meta { font-variant-numeric: tabular-nums; font-size: .78rem; color: var(--text-muted); margin-top: 4px; }
 
-.tt-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-sm); }
-.tt { width: 100%; min-width: 1180px; table-layout: fixed; font-size: .78rem; }
-.tt col.time-col { width: 86px; }
+/* The grid may grow past the text column on wide screens. */
+.tt-wrap {
+  --tt-w: min(1440px, calc(100vw - 2 * var(--gutter)));
+  width: var(--tt-w); margin-inline: min(0px, calc((100% - var(--tt-w)) / 2));
+  overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-sm); }
+.tt { width: 100%; table-layout: fixed; font-size: .74rem; }
+.tt col.time-col { width: 74px; }
 .tt th { background: var(--ink-900); color: #fff; font-weight: 600; padding: 10px 6px; text-align: center; font-size: .82rem; }
 .tt thead tr:nth-child(2) th { background: var(--ink-800); color: var(--ink-300); font-variant-numeric: tabular-nums; font-size: .66rem; font-weight: 500; padding: 5px 2px; }
 .tt th.day-start, .tt td.day-start { border-left: 2px solid var(--ink-200); }
@@ -698,14 +704,42 @@ site-footer { display: block; }
 }
 .chip + .chip { margin-top: 4px; height: auto; }
 .chip-code { font-variant-numeric: tabular-nums; font-weight: 600; font-size: .68rem; color: color-mix(in srgb, var(--chip, var(--accent-500)) 70%, black); }
-.chip-name { font-weight: 500; color: var(--text); font-size: .74rem; }
+.chip-name { font-weight: 500; color: var(--text); font-size: .7rem; hyphens: auto; overflow-wrap: break-word; }
+.tt td.narrow { padding: 3px; }
+.tt td.narrow .chip { padding: 5px; }
+.tt td.narrow .chip-name { font-size: .64rem; letter-spacing: -.02em; }
+.tt td.narrow .chip-meta { font-size: .58rem; }
 .chip-meta { font-variant-numeric: tabular-nums; font-size: .62rem; color: var(--text-muted); margin-top: auto; padding-top: 2px; }
 .chip-an { background: color-mix(in srgb, var(--chip, var(--accent-500)) 6%, white); }
 .tt td.an-cell { vertical-align: middle; }
 .an-label { font-variant-numeric: tabular-nums; font-size: .72rem; color: var(--text-faint); text-align: center; margin-bottom: 6px; }
 
+#course-body td:nth-child(1), #course-body td:nth-child(4), #course-body td:nth-child(5) { white-space: nowrap; }
+
 .legend-segs { display: flex; flex-wrap: wrap; gap: 16px; font-size: .8rem; color: var(--text-muted); margin-top: 14px; }
 .legend-segs b { font-variant-numeric: tabular-nums; color: var(--text); font-weight: 600; }
+
+/* ── Course listings ──────────────────────────────────────────────────── */
+.course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 14px; align-items: start; }
+.cc-group-title { font-size: 1rem; margin: 26px 0 12px; display: flex; align-items: baseline; gap: 10px; }
+.cc-group-title:first-of-type { margin-top: 8px; }
+.cc-group-title span { font-size: .75rem; font-weight: 400; color: var(--text-faint); }
+.cc-lede { font-size: .85rem; margin: -6px 0 16px; }
+.course-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;
+  scroll-margin-top: calc(var(--header-h) + 24px);
+  transition: border-color .2s, box-shadow .2s;
+}
+.course-card.is-linked { border-color: var(--accent-500); box-shadow: 0 0 0 3px var(--accent-100); }
+.cc-top { display: flex; align-items: center; gap: 10px; }
+.cc-cr { margin-left: auto; font-variant-numeric: tabular-nums; font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
+.course-card h3 { font-size: 1.02rem; line-height: 1.35; }
+.cc-desc { font-size: .84rem; line-height: 1.6; color: var(--text-body); flex: 1; }
+.cc-missing { color: var(--text-faint); font-style: italic; }
+.cc-foot { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .72rem; color: var(--text-faint); padding-top: 8px; border-top: 1px solid var(--ink-50); }
+.cc-foot a { color: var(--text-muted); text-decoration: underline; text-decoration-color: var(--ink-200); text-underline-offset: 2px; }
+.cc-foot a:hover { color: var(--accent-600); }
 
 /* ── Recruiters ───────────────────────────────────────────────────────── */
 .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }

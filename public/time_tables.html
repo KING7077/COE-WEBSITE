@@ -8,7 +8,7 @@
   <link rel="icon" href="./assets/images/iithlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -45,8 +45,8 @@
           <table class="tt" id="tt"></table>
         </div>
         <div class="legend-segs">
-          <span>Each day is split into segment pairs <b>1–2</b>, <b>3–4</b>, <b>5–6</b> of the semester; a course spanning several segments is merged across them.</span>
-          <span><b>AN</b> = afternoon lab block (14:30–17:25).</span>
+          <span>Column headings are the semester segments each column covers (<b>1–2</b>, <b>3–4</b>, <b>5–6</b>); a day is only split where its courses change between segments.</span>
+          <span><b>AN</b> = afternoon lab block (14:30–17:25). Labs with their own timings show them on the block.</span>
         </div>
 
         <div id="basket-note"></div>
@@ -105,9 +105,11 @@
       </div>`;
     }
 
+    const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+
     function buildMaps(s) {
       const slots = {};
-      const an = {};
+      const blocks = {};
       const courses = [...s.courses, ...(s.basket ? s.basket.courses.map(c => ({ ...c, optional: true })) : [])];
       let colorIdx = 0;
       const colorOf = {};
@@ -116,8 +118,10 @@
         if (!(c.code in colorOf)) colorOf[c.code] = PALETTE[colorIdx++ % PALETTE.length];
         c.place.forEach(p => {
           const entry = { ...c, seg: p.seg, color: colorOf[c.code] };
-          if (p.an) {
-            (an[p.an] = an[p.an] || []).push(entry);
+          if (p.day) {
+            const key = `${p.from}|${p.to}`;
+            const day = (blocks[p.day] = blocks[p.day] || {});
+            (day[key] = day[key] || { from: p.from, to: p.to, list: [] }).list.push(entry);
             return;
           }
           const [a, b] = segRange(p.seg);
@@ -125,71 +129,114 @@
           PAIRS.forEach(([key, lo, hi]) => { if (a <= hi && b >= lo) cell[key].push(entry); });
         });
       });
-      return { slots, an };
+      // Place each timed block on the grid rows it covers.
+      const placed = {};
+      Object.entries(blocks).forEach(([day, byKey]) => {
+        placed[day] = {};
+        Object.values(byKey).forEach(b => {
+          const rows = TT.grid.map((r, i) => ({ r, i }))
+            .filter(({ r }) => !r.lunch && toMin(r.time) >= toMin(b.from) - 5 && toMin(r.end) <= toMin(b.to) + 5);
+          if (!rows.length) return;
+          placed[day][rows[0].i] = { ...b, span: rows.length };
+          rows.slice(1).forEach(({ i }) => { placed[day][i] = 'covered'; });
+        });
+      });
+      return { slots, blocks: placed };
     }
 
     const sameSet = (x, y) => x.length === y.length && x.every((c, i) => c.code === y[i].code && c.name === y[i].name);
 
-    function slotCells(cell, letter) {
-      if (!cell) {
-        return `<td class="day-start" colspan="3"><span class="slot-letter">${esc(letter || '')}</span></td>`;
+    // A day's columns: segment pairs are only kept apart where some slot on
+    // that day actually differs between them, e.g. [[s12], [s34, s56]].
+    function dayColumns(day, slots) {
+      const cells = TT.grid.filter(r => !r.lunch && slots[r[day]]).map(r => slots[r[day]]);
+      const cols = [[PAIRS[0][0]]];
+      for (let i = 1; i < PAIRS.length; i++) {
+        const [prev, key] = [PAIRS[i - 1][0], PAIRS[i][0]];
+        if (cells.some(c => !sameSet(c[prev], c[key]))) cols.push([key]);
+        else cols[cols.length - 1].push(key);
       }
-      // Merge equal neighbouring pairs into one cell.
+      return cols;
+    }
+    const colLabel = keys => {
+      const lo = PAIRS.find(p => p[0] === keys[0])[1];
+      const hi = PAIRS.find(p => p[0] === keys[keys.length - 1])[2];
+      return `${lo}–${hi}`;
+    };
+
+    function slotCells(cell, letter, cols) {
+      if (!cell) {
+        return `<td class="day-start" colspan="${cols.length}"><span class="slot-letter">${esc(letter || '')}</span></td>`;
+      }
+      // Merge equal neighbouring columns into one cell.
       const groups = [];
-      PAIRS.forEach(([key]) => {
-        const list = cell[key];
+      cols.forEach(keys => {
+        const list = cell[keys[0]];
         const last = groups[groups.length - 1];
         if (last && sameSet(last.list, list)) last.span++;
         else groups.push({ list, span: 1 });
       });
-      let first = true;
-      return groups.map(g => {
-        const cls = first ? 'day-start' : '';
-        first = false;
+      return groups.map((g, i) => {
+        const cls = [i === 0 ? 'day-start' : '', g.span === 1 && cols.length > 1 ? 'narrow' : ''].filter(Boolean).join(' ');
         const inner = g.list.length ? g.list.map(c => chip(c)).join('') : '';
-        return `<td class="${cls}"${g.span > 1 ? ` colspan="${g.span}"` : ''}>${inner}</td>`;
+        return `<td${cls ? ` class="${cls}"` : ''}${g.span > 1 ? ` colspan="${g.span}"` : ''}>${inner}</td>`;
       }).join('');
     }
 
     function renderGrid() {
       const s = sem();
-      const { slots, an } = buildMaps(s);
+      const { slots, blocks } = buildMaps(s);
       const days = TT.days;
-      let html = `<colgroup><col class="time-col">${days.map(() => '<col><col><col>').join('')}</colgroup>`;
+
+      const layout = {};
+      days.forEach(day => { layout[day] = dayColumns(day, slots); });
+      const n = day => layout[day].length;
+      // Width units: one per column, but an unsplit day still gets two.
+      const units = day => Math.max(n(day), 2);
+      const totalUnits = days.reduce((a, d) => a + units(d), 0);
+      const colTags = days.map(d => {
+        const w = (100 * units(d)) / totalUnits / n(d);
+        return `<col style="width:${w.toFixed(3)}%">`.repeat(n(d));
+      }).join('');
+
+      const table = document.getElementById('tt');
+      // Keep every column wide enough for whole words; scroll below that.
+      table.style.minWidth = `${74 + totalUnits * 100}px`;
+
+      let html = `<colgroup><col class="time-col">${colTags}</colgroup>`;
       html += `<thead>
-        <tr><th rowspan="2" scope="col">Time</th>${days.map(d => `<th colspan="3" scope="colgroup" class="day-start">${d}</th>`).join('')}</tr>
-        <tr>${days.map(() => ['1–2', '3–4', '5–6'].map((x, i) => `<th scope="col"${i === 0 ? ' class="day-start"' : ''}>${x}</th>`).join('')).join('')}</tr>
+        <tr><th rowspan="2" scope="col">Time</th>${days.map(d => `<th colspan="${n(d)}" scope="colgroup" class="day-start">${d}</th>`).join('')}</tr>
+        <tr>${days.map(d => layout[d].map((keys, i) => `<th scope="col"${i === 0 ? ' class="day-start"' : ''}>${colLabel(keys)}</th>`).join('')).join('')}</tr>
       </thead><tbody>`;
 
-      TT.grid.forEach(row => {
+      TT.grid.forEach((row, rowIdx) => {
         const time = `<td class="time"><b>${row.time}</b>${row.end}</td>`;
         if (row.lunch) {
-          html += `<tr class="lunch">${time}<td colspan="${days.length * 3}">Lunch break</td></tr>`;
+          html += `<tr class="lunch">${time}<td colspan="${days.reduce((a, d) => a + n(d), 0)}">Lunch break</td></tr>`;
           return;
         }
         let cells = '';
         days.forEach(day => {
-          const lab = an[day];
-          if (lab && row.an) {
-            if (row.an === 1) {
-              cells += `<td class="day-start an-cell" colspan="3" rowspan="2">
-                <div class="an-label">Lab block</div>
-                ${lab.map(c => chip(c, 'chip-an')).join('')}
-              </td>`;
-            }
+          const block = blocks[day] && blocks[day][rowIdx];
+          if (block === 'covered') return;
+          if (block) {
+            cells += `<td class="day-start an-cell" colspan="${n(day)}" rowspan="${block.span}">
+              <div class="an-label">Lab · ${block.from}–${block.to}</div>
+              ${block.list.map(c => chip(c, 'chip-an')).join('')}
+            </td>`;
             return;
           }
           const letter = row[day];
           if (!letter || letter === 'AN') {
-            cells += `<td class="day-start" colspan="3"><span class="slot-letter">${letter === 'AN' ? 'AN' : ''}</span></td>`;
+            cells += `<td class="day-start" colspan="${n(day)}"><span class="slot-letter">${letter === 'AN' ? 'AN' : ''}</span></td>`;
             return;
           }
-          cells += slotCells(slots[letter], letter);
+          cells += slotCells(slots[letter], letter, layout[day]);
         });
         html += `<tr>${time}${cells}</tr>`;
       });
       html += '</tbody>';
-      document.getElementById('tt').innerHTML = html;
+      table.innerHTML = html;
     }
 
     function creditValue(c) {
