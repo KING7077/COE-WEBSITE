@@ -1,178 +1,224 @@
+/* Shared header, footer and page behaviour for every page. */
+
+const CALENDAR_PDF = './assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf';
+
+const ICONS = {
+  chevron: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>',
+  menu: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  close: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  mail: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+  phone: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  pin: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+  arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  up: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>',
+};
+
+const NAV = [
+  { label: 'Home', href: 'index.html' },
+  {
+    label: 'About', children: [
+      { label: 'About IITH', href: 'index.html#aboutiith' },
+      { label: 'About CO', href: 'aboutcoe.html' },
+      { label: 'Announcements', href: 'index.html#announcements' },
+      { label: 'Message from HOD', href: 'hod.html' },
+    ],
+  },
+  {
+    label: 'Academics', children: [
+      { label: 'Academic Calendar', href: CALENDAR_PDF, external: true },
+      { label: 'Curriculum', href: 'curriculum.html' },
+      { label: 'Courses', href: 'courses.html' },
+      { label: 'Time Tables', href: 'time_tables.html' },
+    ],
+  },
+  {
+    label: 'People', children: [
+      { label: 'Faculty', href: 'faculty.html' },
+      { label: 'Students', href: 'students.html' },
+      { label: 'Alumni', href: 'alumni.html' },
+    ],
+  },
+  { label: 'Internships & Placements', href: 'internships_placements.html' },
+];
+
+function currentPage() {
+  const file = window.location.pathname.split('/').pop() || 'index.html';
+  return file.endsWith('.html') ? file : `${file}.html`;
+}
+
+function isActive(href) {
+  if (!href || href.startsWith('./assets')) return false;
+  const [file, hash] = href.split('#');
+  if (file !== currentPage()) return false;
+  if (hash) return window.location.hash === `#${hash}`;
+  return !window.location.hash || currentPage() !== 'index.html';
+}
+
+function linkAttrs(item) {
+  return item.external ? ' target="_blank" rel="noopener noreferrer"' : '';
+}
+
 class SiteHeader extends HTMLElement {
   connectedCallback() {
+    const items = NAV.map((item, i) => {
+      if (!item.children) {
+        return `<li><a class="nav-link" href="${item.href}">${item.label}</a></li>`;
+      }
+      const sub = item.children
+        .map(c => `<li><a href="${c.href}"${linkAttrs(c)}>${c.label}</a></li>`)
+        .join('');
+      return `
+        <li class="nav-item">
+          <a class="nav-link" href="#" role="button" aria-expanded="false" aria-controls="submenu-${i}">${item.label}${ICONS.chevron}</a>
+          <ul class="nav-menu" id="submenu-${i}">${sub}</ul>
+        </li>`;
+    }).join('');
+
     this.innerHTML = `
-    <div id="header" class="header" style="box-shadow: var(--shadow-xs)">
-      <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between" style="height: 100%">
-        <a href="index.html" class="logo" aria-label="Computational Engineering, IIT Hyderabad — Home">
-          <img src="./assets/images/iithlogo.png" class="logo-img" alt="IIT Hyderabad Logo" />
-          <div class="logo-text">
-            <h1>Computational Engineering</h1>
-            <h2>Indian Institute of Technology, Hyderabad</h2>
-          </div>
-        </a>
-        <nav id="navmenu" class="navmenu" role="navigation" aria-label="Main navigation">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li class="dropdown">
-              <a href="#" aria-haspopup="true"><span>About Us</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-left: 2px;"><path d="m6 9 6 6 6-6"/></svg></a>
-              <ul>
-                <li><a href="index.html#aboutiith">About IITH</a></li>
-                <li><a href="aboutcoe.html">About CO</a></li>
-                <li><a href="index.html#announcements">Announcements</a></li>
-                <li><a href="hod.html">Message from HOD</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" aria-haspopup="true"><span>Academics</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-left: 2px;"><path d="m6 9 6 6 6-6"/></svg></a>
-              <ul>
-                <li><a href="./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf" target="_blank" rel="noopener noreferrer">Academic Calendar</a></li>
-                <li><a href="curriculum.html">Curriculum</a></li>
-                <li><a href="courses.html">Courses</a></li>
-                <li><a href="time_tables.html">Time Tables</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" aria-haspopup="true"><span>People</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-left: 2px;"><path d="m6 9 6 6 6-6"/></svg></a>
-              <ul>
-                <li><a href="faculty.html">Faculty</a></li>
-                <li><a href="students.html">Students</a></li>
-                <li><a href="alumni.html">Alumni</a></li>
-              </ul>
-            </li>
-            <li><a href="internships_placements.html">Internships & Placements</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-          <button id="menuToggle" type="button" class="menu-toggle d-xl-none" aria-label="Open navigation menu" aria-controls="navmenu">
-            <svg class="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-            <svg class="close-icon d-none" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-          </button>
-        </nav>
+      <a class="skip-link" href="#main">Skip to content</a>
+      <div class="topbar">
+        <div class="container">
+          <span class="topbar-meta">Department of Computational Engineering · Indian Institute of Technology Hyderabad</span>
+          <span class="topbar-links">
+            <a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a>
+            <a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">iith.ac.in ↗</a>
+          </span>
+        </div>
       </div>
-    </div>
-    `;
+      <header class="site-header" id="top">
+        <div class="container">
+          <a href="index.html" class="brand" aria-label="Computational Engineering, IIT Hyderabad — Home">
+            <img src="./assets/images/iithlogo.png" alt="" width="44" height="44" />
+            <span class="brand-text">
+              <span class="brand-name">Computational Engineering</span>
+              <span class="brand-sub">Indian Institute of Technology Hyderabad</span>
+            </span>
+          </a>
+          <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+            <ul class="nav-list">${items}</ul>
+            <div class="nav-cta"><a class="btn btn-dark btn-sm" href="contact.html">Contact</a></div>
+          </nav>
+          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">${ICONS.menu}</button>
+        </div>
+      </header>`;
 
-    // Interactive logic
-    const header = this.querySelector('#header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 10) {
-        header.style.boxShadow = 'var(--shadow-md)';
-      } else {
-        header.style.boxShadow = 'var(--shadow-xs)';
+    // The header sits after the topbar; make the custom element itself non-sticky
+    // so the inner <header> can stick to the viewport.
+    this.style.display = 'contents';
+
+    const header = this.querySelector('.site-header');
+    const nav = this.querySelector('.site-nav');
+    const toggle = this.querySelector('.menu-toggle');
+
+    // Active states
+    this.querySelectorAll('.site-nav a[href]').forEach(a => {
+      if (isActive(a.getAttribute('href'))) {
+        a.classList.add('active');
+        a.setAttribute('aria-current', 'page');
+        const parent = a.closest('.nav-item');
+        if (parent) parent.querySelector('.nav-link').classList.add('active');
       }
     });
 
-    const menuToggle = this.querySelector('#menuToggle');
-    const navUl = this.querySelector('#navmenu > ul');
-    const menuIcon = this.querySelector('.menu-icon');
-    const closeIcon = this.querySelector('.close-icon');
-    let mobileOpen = false;
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-    const toggleMenu = () => {
-      mobileOpen = !mobileOpen;
-      if (mobileOpen) {
-        navUl.classList.add('show');
-        menuIcon.classList.add('d-none');
-        closeIcon.classList.remove('d-none');
-      } else {
-        navUl.classList.remove('show');
-        menuIcon.classList.remove('d-none');
-        closeIcon.classList.add('d-none');
-      }
+    const setOpen = open => {
+      nav.classList.toggle('open', open);
+      document.body.classList.toggle('nav-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      toggle.innerHTML = open ? ICONS.close : ICONS.menu;
+      if (open) nav.style.setProperty('--nav-top', `${header.getBoundingClientRect().bottom}px`);
     };
+    toggle.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
+    window.addEventListener('resize', () => { if (window.innerWidth > 1100) setOpen(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
 
-    menuToggle.addEventListener('click', toggleMenu);
-
-    const dropdowns = this.querySelectorAll('.dropdown > a');
-    dropdowns.forEach(dropdown => {
-      dropdown.addEventListener('click', (e) => {
-        if (window.innerWidth < 1024) {
-          e.preventDefault();
-          const parentLi = dropdown.parentElement;
-          parentLi.classList.toggle('active');
-        }
+    this.querySelectorAll('.nav-item > .nav-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const li = link.parentElement;
+        const open = !li.classList.contains('open');
+        li.classList.toggle('open', open);
+        link.setAttribute('aria-expanded', String(open));
       });
     });
 
-    // Mark active link
-    const updateActiveLinks = () => {
-      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-      const currentHash = window.location.hash || '';
-      const currentFullPath = currentPath + currentHash;
-      const links = this.querySelectorAll('nav a');
-      
-      // Clear all active classes first
-      links.forEach(link => link.classList.remove('active'));
-      
-      // Apply active class based on current path and hash
-      links.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentFullPath || (currentHash === '' && href === currentPath)) {
-          link.classList.add('active');
-          const parentDropdown = link.closest('.dropdown');
-          if (parentDropdown) {
-            parentDropdown.querySelector('a').classList.add('active');
-          }
-        }
-      });
-    };
-
-    updateActiveLinks();
-    window.addEventListener('hashchange', updateActiveLinks);
+    nav.querySelectorAll('.nav-menu a, .nav-list > li > a:not([role])').forEach(a => {
+      a.addEventListener('click', () => setOpen(false));
+    });
   }
 }
 
 class SiteFooter extends HTMLElement {
   connectedCallback() {
+    const year = new Date().getFullYear();
     this.innerHTML = `
-    <footer class="footer-wrapper">
-      <div class="footer-top">
-        <div class="footer-grid">
-          <div class="footer-col">
-            <h4>IIT Hyderabad</h4>
-            <div class="video-container">
-              <iframe src="https://www.youtube.com/embed/WotHf4J8kiQ?mute=1&loop=1&playlist=WotHf4J8kiQ" title="IIT Hyderabad Campus Tour" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Quick Links</h4>
-            <a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer" class="footer-link">IIT Hyderabad</a>
-            <a href="./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf" target="_blank" rel="noopener noreferrer" class="footer-link">Academic Calendar</a>
-            <a href="curriculum.html" class="footer-link">Curriculum</a>
-            <a href="internships_placements.html" class="footer-link">Internships & Placements</a>
-            <a href="faculty.html" class="footer-link">Faculty</a>
-            <a href="contact.html" class="footer-link">Contact Us</a>
-          </div>
-          <div class="footer-col">
-            <h4>Contact Us</h4>
-            <div class="footer-contact-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-              <div>
-                <div style="margin-bottom: 0.25rem;"><a href="mailto:head@co.iith.ac.in" style="color: inherit;">head@co.iith.ac.in</a></div>
-                <div><a href="mailto:dugc@co.iith.ac.in" style="color: inherit;">dugc@co.iith.ac.in</a></div>
-              </div>
-            </div>
-            <div class="footer-contact-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              <span>040-2301-6359</span>
-            </div>
-            <div class="footer-contact-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>Near NH-65, Sangareddy, Kandi<br />Telangana, India — 502285</span>
+      <footer class="site-footer">
+        <div class="footer-cta">
+          <div class="container">
+            <h2>Engineering, computed — at IIT Hyderabad.</h2>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="curriculum.html">Explore the curriculum ${ICONS.arrow}</a>
+              <a class="btn btn-ghost-light" href="contact.html">Contact us</a>
             </div>
           </div>
         </div>
-      </div>
-      <hr class="footer-divider" />
-      <div class="footer-bottom">
-        <span>© ${new Date().getFullYear()} Computational Engineering Programme, IIT Hyderabad. All rights reserved.</span>
-        <a href="#top" class="btn-back-top" aria-label="Back to top">Back to top ↑</a>
-        <span>Built with Vanilla HTML/JS</span>
-      </div>
-    </footer>
-    `;
+        <div class="container footer-grid">
+          <div>
+            <div class="footer-brand">
+              <img src="./assets/images/iithlogo.png" alt="" width="44" height="44" />
+              <div>
+                <b>Computational Engineering</b>
+                <span>Indian Institute of Technology Hyderabad</span>
+              </div>
+            </div>
+            <p class="footer-about">India's first undergraduate programme dedicated to computational engineering, launched at IIT Hyderabad in 2021.</p>
+            <div class="footer-video">
+              <iframe src="https://www.youtube-nocookie.com/embed/WotHf4J8kiQ?mute=1&loop=1&playlist=WotHf4J8kiQ" title="IIT Hyderabad campus tour" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+          </div>
+          <div>
+            <div class="footer-h">Academics</div>
+            <ul class="footer-links">
+              <li><a href="curriculum.html">Curriculum</a></li>
+              <li><a href="time_tables.html">Time Tables</a></li>
+              <li><a href="courses.html">Courses</a></li>
+              <li><a href="${CALENDAR_PDF}" target="_blank" rel="noopener noreferrer">Academic Calendar</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-h">Department</div>
+            <ul class="footer-links">
+              <li><a href="aboutcoe.html">About CO</a></li>
+              <li><a href="hod.html">Message from HOD</a></li>
+              <li><a href="faculty.html">Faculty</a></li>
+              <li><a href="students.html">Students</a></li>
+              <li><a href="alumni.html">Alumni</a></li>
+              <li><a href="internships_placements.html">Internships &amp; Placements</a></li>
+              <li><a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">IIT Hyderabad ↗</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-h">Contact</div>
+            <div class="footer-contact">
+              <div>${ICONS.mail}<span><a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a><br><a href="mailto:dugc@co.iith.ac.in">dugc@co.iith.ac.in</a></span></div>
+              <div>${ICONS.phone}<span>040-2301-6670</span></div>
+              <div>${ICONS.pin}<span>Near NH-65, Sangareddy, Kandi<br>Telangana, India — 502285</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="container">
+            <span>© ${year} Computational Engineering Programme, IIT Hyderabad. All rights reserved.</span>
+            <a href="#top" class="back-top">Back to top ↑</a>
+          </div>
+        </div>
+      </footer>`;
 
-    const backToTop = this.querySelector('.btn-back-top');
-    backToTop.addEventListener('click', (e) => {
+    this.querySelector('.back-top').addEventListener('click', e => {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -182,83 +228,35 @@ class SiteFooter extends HTMLElement {
 customElements.define('site-header', SiteHeader);
 customElements.define('site-footer', SiteFooter);
 
-// ── Scroll Reveal & Custom Cursor ────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  // Custom cursor (fine-pointer devices only)
-  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-  if (isFinePointer) {
-    let cursor = document.querySelector('.custom-cursor');
-    if (!cursor) {
-      cursor = document.createElement('div');
-      cursor.className = 'custom-cursor';
-      cursor.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(cursor);
-
-      const moveCursor = (e) => {
-        cursor.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
-      };
-      document.addEventListener('mousemove', moveCursor, { passive: true });
-    }
-
-    const onEnter = () => cursor.classList.add('hover');
-    const onLeave = () => cursor.classList.remove('hover');
-    const targets = document.querySelectorAll('a, button, [role="button"]');
-    targets.forEach(el => {
-      el.addEventListener('mouseenter', onEnter, { passive: true });
-      el.addEventListener('mouseleave', onLeave, { passive: true });
+/* Fade elements marked [data-reveal] (and their [data-reveal-children]) into view. */
+function initReveal(root = document) {
+  const targets = [];
+  root.querySelectorAll('[data-reveal]').forEach(el => targets.push(el));
+  root.querySelectorAll('[data-reveal-children]').forEach(parent => {
+    [...parent.children].forEach((child, i) => {
+      child.style.transitionDelay = `${Math.min(i, 8) * 60}ms`;
+      targets.push(child);
     });
-  }
-
-  // Scroll Reveal
-  const REVEAL_SELECTORS = [
-    '.page-hero', '.aboutiith', '.div-2', '.card-section', '.screen-split',
-    '.faculty-card', '.student-card', '.info-card', '.card-modern',
-    '.feature-card', '.coordinator-card', '.hod-profile-card',
-    '.section-title', '.footer-col'
-  ].join(', ');
-
-  const observer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    },
-    { root: null, rootMargin: '0px 0px -40px 0px', threshold: 0.12 }
-  );
-
-  const attachReveal = () => {
-    const elements = document.querySelectorAll(REVEAL_SELECTORS);
-    elements.forEach((el, index) => {
-      if (el.classList.contains('revealed')) return;
-      // Stagger card-like elements
-      const isCard = el.classList.contains('faculty-card') ||
-                     el.classList.contains('student-card') ||
-                     el.classList.contains('feature-card') ||
-                     el.classList.contains('coordinator-card');
-      if (isCard) {
-        el.style.transitionDelay = `${(index % 5) * 80}ms`;
+  });
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        obs.unobserve(entry.target);
       }
-      el.classList.add('reveal');
-      observer.observe(el);
     });
-  };
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+  targets.forEach(el => {
+    if (el.classList.contains('revealed')) return;
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+}
 
-  setTimeout(attachReveal, 120);
+document.addEventListener('DOMContentLoaded', () => initReveal());
 
-  // Hash / scroll-to-top
-  if (window.location.hash) {
-    setTimeout(() => {
-      const target = document.querySelector(window.location.hash);
-      if (target) {
-        const offset = target.getBoundingClientRect().top + window.scrollY - 90;
-        window.scrollTo({ top: offset, behavior: 'smooth' });
-      }
-    }, 150);
-  } else {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }
-});
-
+/* Escape text before putting it in HTML strings. */
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}

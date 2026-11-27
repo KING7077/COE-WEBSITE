@@ -3,271 +3,266 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Time Tables - Computational Engineering</title>
-  <link href="./assets/images/iithlogo.png" rel="icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Time Tables · Computational Engineering · IIT Hyderabad</title>
+  <meta name="description" content="Weekly time tables for every semester of the B.Tech in Computational Engineering at IIT Hyderabad.">
+  <link rel="icon" href="./assets/images/iithlogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <site-header></site-header>
-  <main>
-    <div class="page-hero">
-      <h1 class="page-hero-title">Time Tables</h1>
-      <p class="page-hero-subtitle">July - November 2026 Schedules</p>
-    </div>
 
-    <div class="container" style="max-width: 1240px; margin: 0 auto; padding: var(--space-8) var(--space-4);">
-      
-      <!-- Semester tabs -->
-      <div id="sem-tabs" style="display: flex; gap: var(--space-2); flex-wrap: wrap; justify-content: center; margin-bottom: var(--space-6);">
-        <!-- Rendered by JS -->
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Academics</span><span aria-hidden="true">/</span><span>Time Tables</span></nav>
+        <span class="eyebrow">Weekly schedules</span>
+        <h1>Time Tables</h1>
+        <p id="hero-sub">Semester schedules on the IITH slot grid.</p>
+        <div class="tabs tabs-dark mt-md" role="tablist" id="term-tabs" aria-label="Academic term"></div>
       </div>
+    </section>
 
-      <div class="card-modern" style="padding: var(--space-6);">
-        <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--amber-500); flex-shrink: 0;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <h3 id="table-title" style="font-weight: 800; margin: 0; color: var(--color-text); font-size: var(--text-xl); font-family: var(--font-display);">
-            — Timetable
-          </h3>
-        </div>
-        <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-5);">
-          Each day is split into three sub-columns: <strong>1–2</strong>, <strong>3–4</strong>, <strong>5–6</strong> (segment pairs). Courses spanning multiple segments are visually merged. AN = afternoon lab block.
-        </p>
-
-        <div class="table-wrapper">
-          <table style="min-width: 1050px; border-collapse: collapse; width: 100%;">
-            <thead id="table-head">
-              <!-- Static headers rendered by JS initially -->
-            </thead>
-            <tbody id="table-body">
-              <!-- Rendered by JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <div id="unscheduled-container"></div>
-        <div id="alert-container"></div>
-
-        <div style="margin-top: var(--space-6);">
-          <a href="./assets/files/IITH-Academic-Calendar-Jul-Nov-2026.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            Download Academic Calendar
+    <section class="section-tight">
+      <div class="container">
+        <div class="toolbar">
+          <div class="tabs" role="tablist" id="sem-tabs" aria-label="Semester"></div>
+          <a id="calendar-btn" class="btn btn-outline btn-sm" target="_blank" rel="noopener noreferrer" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>
+            Academic Calendar
           </a>
         </div>
+
+        <div class="tt-head">
+          <div>
+            <h2 id="tt-title">Timetable</h2>
+            <div class="meta" id="tt-meta"></div>
+          </div>
+        </div>
+
+        <div class="tt-wrap">
+          <table class="tt" id="tt"></table>
+        </div>
+        <div class="legend-segs">
+          <span>Each day is split into segment pairs <b>1–2</b>, <b>3–4</b>, <b>5–6</b> of the semester; a course spanning several segments is merged across them.</span>
+          <span><b>AN</b> = afternoon lab block (14:30–17:25).</span>
+        </div>
+
+        <div id="basket-note"></div>
+
+        <h3 class="mt-lg" style="font-size: 1.4rem;">Courses this semester</h3>
+        <div class="table-wrap mt-sm">
+          <table class="table">
+            <thead><tr><th>Code</th><th>Course</th><th>Slot</th><th>Segments</th><th>Room</th><th>Instructor</th><th class="num">Credits</th></tr></thead>
+            <tbody id="course-body"></tbody>
+            <tfoot><tr><td colspan="6">Total credits</td><td class="num" id="course-total"></td></tr></tfoot>
+          </table>
+        </div>
+        <p class="muted mt-sm" style="font-size: .85rem;">Department electives offered this term are listed on the <a class="link-arrow" href="curriculum.html#electives">curriculum page</a>.</p>
       </div>
-    </div>
+    </section>
   </main>
+
   <site-footer></site-footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="components.js"></script>
-  <script src="parsed_timetables.js"></script>
+  <script src="data/timetables.js"></script>
   <script>
-    let activeSem = 'sem1';
-    let data = null;
+    const TT = window.TIMETABLES;
+    const PALETTE = ['#e3662a', '#2f6fb0', '#138a7e', '#8f5bc0', '#c4457e', '#6a7f2c', '#d48a1c', '#34496a', '#0f7aa8', '#9b4d2e'];
+    const PAIRS = [['s12', 1, 2], ['s34', 3, 4], ['s56', 5, 6]];
 
-    const EMPTY = `<span style="color: var(--color-text-muted); font-size: 0.7em;">—</span>`;
-    const TD_STYLE = `padding: 4px 3px; vertical-align: top; border-right: 1px dashed var(--color-border);`;
+    const segRange = seg => {
+      const s = String(seg || '16');
+      return s.length === 2 ? [Number(s[0]), Number(s[1])] : [1, 6];
+    };
+    const segLabel = seg => {
+      const [a, b] = segRange(seg);
+      return a === b ? `${a}` : `${a}–${b}`;
+    };
 
-    function renderCourseChip(course) {
-      if (!course) return '';
-      let chip = `<div style="background: rgba(245,158,11,0.08); border-left: 3px solid var(--amber-500); border-radius: 3px; padding: 4px 6px; text-align: left;">`;
-      chip += `<div style="font-weight: 700; color: var(--amber-700); font-size: 0.72em;">${course.code}</div>`;
-      chip += `<div style="color: var(--color-text); font-weight: 500; font-size: 0.78em; line-height: 1.3;">${course.name}</div>`;
-      if (course.seg) {
-        chip += `<div style="display: inline-block; background: var(--amber-500); color: #fff; font-weight: 700; font-size: 0.62em; border-radius: 3px; padding: 1px 5px; margin-top: 3px;">Seg ${course.seg}</div>`;
-      }
-      if (course.room) {
-        chip += `<div style="color: var(--color-text-muted); font-size: 0.68em; margin-top: 2px;">${course.room}</div>`;
-      }
-      chip += `</div>`;
-      return chip;
+    function defaultTerm() {
+      const m = new Date().getMonth() + 1;
+      const hit = TT.terms.find(t => t.startMonth <= t.endMonth
+        ? m >= t.startMonth && m <= t.endMonth
+        : m >= t.startMonth || m <= t.endMonth);
+      return (hit || TT.terms[0]).id;
     }
 
-    function isSame(c1, c2) {
-      if (!c1 && !c2) return true;
-      if (!c1 || !c2) return false;
-      return c1.code === c2.code && c1.name === c2.name;
+    const params = new URLSearchParams(location.search);
+    let termId = TT.terms.some(t => t.id === params.get('term')) ? params.get('term') : defaultTerm();
+    let semId = params.get('sem');
+
+    const term = () => TT.terms.find(t => t.id === termId);
+    const sem = () => term().semesters.find(s => s.id === semId) || term().semesters[0];
+
+    function chip(c, extra = '') {
+      return `<div class="chip ${extra}" style="--chip:${c.color}" title="${esc(c.name)}${c.instructor ? ' — ' + esc(c.instructor) : ''}">
+        <span class="chip-code">${esc(c.code)}</span>
+        <span class="chip-name">${esc(c.name)}</span>
+        <span class="chip-meta">${[c.room, c.seg ? 'Seg ' + segLabel(c.seg) : ''].filter(Boolean).map(esc).join(' · ')}</span>
+      </div>`;
     }
 
-    function renderSegCells(sd) {
-      if (!sd) {
-        return `
-          <td style="${TD_STYLE}">${EMPTY}</td>
-          <td style="${TD_STYLE}">${EMPTY}</td>
-          <td style="${TD_STYLE}">${EMPTY}</td>
-        `;
-      }
-      const { s12, s34, s56 } = sd;
-
-      if (isSame(s12, s34) && isSame(s34, s56) && s12) {
-        return `<td colspan="3" style="${TD_STYLE}">${renderCourseChip(s12)}</td>`;
-      }
-      if (isSame(s12, s34) && s12) {
-        return `
-          <td colspan="2" style="${TD_STYLE}">${renderCourseChip(s12)}</td>
-          <td style="${TD_STYLE}">${s56 ? renderCourseChip(s56) : EMPTY}</td>
-        `;
-      }
-      if (isSame(s34, s56) && s34) {
-        return `
-          <td style="${TD_STYLE}">${s12 ? renderCourseChip(s12) : EMPTY}</td>
-          <td colspan="2" style="${TD_STYLE}">${renderCourseChip(s34)}</td>
-        `;
-      }
-      return `
-        <td style="${TD_STYLE}">${s12 ? renderCourseChip(s12) : EMPTY}</td>
-        <td style="${TD_STYLE}">${s34 ? renderCourseChip(s34) : EMPTY}</td>
-        <td style="${TD_STYLE}">${s56 ? renderCourseChip(s56) : EMPTY}</td>
-      `;
+    function buildMaps(s) {
+      const slots = {};
+      const an = {};
+      const courses = [...s.courses, ...(s.basket ? s.basket.courses.map(c => ({ ...c, optional: true })) : [])];
+      let colorIdx = 0;
+      const colorOf = {};
+      courses.forEach(c => {
+        if (!c.place || !c.place.length) return;
+        if (!(c.code in colorOf)) colorOf[c.code] = PALETTE[colorIdx++ % PALETTE.length];
+        c.place.forEach(p => {
+          const entry = { ...c, seg: p.seg, color: colorOf[c.code] };
+          if (p.an) {
+            (an[p.an] = an[p.an] || []).push(entry);
+            return;
+          }
+          const [a, b] = segRange(p.seg);
+          const cell = (slots[p.slot] = slots[p.slot] || { s12: [], s34: [], s56: [] });
+          PAIRS.forEach(([key, lo, hi]) => { if (a <= hi && b >= lo) cell[key].push(entry); });
+        });
+      });
+      return { slots, an };
     }
 
-    function setActiveSem(semId) {
-      activeSem = semId;
-      render();
-    }
+    const sameSet = (x, y) => x.length === y.length && x.every((c, i) => c.code === y[i].code && c.name === y[i].name);
 
-    function render() {
-      if (!data) return;
-
-      const { semesters, SLOT_DATA, AN_BLOCKS, GRID_ROWS, unscheduled, DAYS } = data;
-
-      // Render Tabs
-      const tabsHtml = semesters.map(s => {
-        const cls = activeSem === s.id ? 'btn-primary' : 'btn-outline';
-        return `<button class="btn ${cls} btn-sm" onclick="setActiveSem('${s.id}')">${s.label}</button>`;
+    function slotCells(cell, letter) {
+      if (!cell) {
+        return `<td class="day-start" colspan="3"><span class="slot-letter">${esc(letter || '')}</span></td>`;
+      }
+      // Merge equal neighbouring pairs into one cell.
+      const groups = [];
+      PAIRS.forEach(([key]) => {
+        const list = cell[key];
+        const last = groups[groups.length - 1];
+        if (last && sameSet(last.list, list)) last.span++;
+        else groups.push({ list, span: 1 });
+      });
+      let first = true;
+      return groups.map(g => {
+        const cls = first ? 'day-start' : '';
+        first = false;
+        const inner = g.list.length ? g.list.map(c => chip(c)).join('') : '';
+        return `<td class="${cls}"${g.span > 1 ? ` colspan="${g.span}"` : ''}>${inner}</td>`;
       }).join('');
-      document.getElementById('sem-tabs').innerHTML = tabsHtml;
+    }
 
-      // Update title
-      const currentSem = semesters.find(s => s.id === activeSem);
-      document.getElementById('table-title').innerText = `${currentSem ? currentSem.label : ''} — Timetable`;
+    function renderGrid() {
+      const s = sem();
+      const { slots, an } = buildMaps(s);
+      const days = TT.days;
+      let html = `<colgroup><col class="time-col">${days.map(() => '<col><col><col>').join('')}</colgroup>`;
+      html += `<thead>
+        <tr><th rowspan="2" scope="col">Time</th>${days.map(d => `<th colspan="3" scope="colgroup" class="day-start">${d}</th>`).join('')}</tr>
+        <tr>${days.map(() => ['1–2', '3–4', '5–6'].map((x, i) => `<th scope="col"${i === 0 ? ' class="day-start"' : ''}>${x}</th>`).join('')).join('')}</tr>
+      </thead><tbody>`;
 
-      // Render Table Head
-      let headHtml = `
-        <tr>
-          <th rowspan="2" style="text-align: center; vertical-align: middle; padding: 8px 6px; min-width: 80px;">Time</th>
-          ${DAYS.map(d => `<th colspan="3" style="text-align: center; padding: 8px 4px; border-left: 2px solid rgba(255,255,255,0.25);">${d}</th>`).join('')}
-        </tr>
-        <tr>
-          ${DAYS.map(d => 
-            ['1–2','3–4','5–6'].map((seg, si) => `
-              <th style="text-align: center; font-size: 0.68em; font-weight: 600; padding: 4px 3px; border-left: ${si === 0 ? '2px solid rgba(255,255,255,0.25)' : '1px dashed rgba(255,255,255,0.3)'}; color: rgba(255,255,255,0.7); white-space: nowrap;">${seg}</th>
-            `).join('')
-          ).join('')}
-        </tr>
-      `;
-      document.getElementById('table-head').innerHTML = headHtml;
-
-      // Render Table Body
-      const slotData = SLOT_DATA[activeSem] || {};
-      const anBlocks = AN_BLOCKS[activeSem] || {};
-      let bodyHtml = '';
-      const anRowSpanConsumed = new Set();
-
-      GRID_ROWS.forEach(row => {
-        if (row.isBreak) {
-          bodyHtml += `
-            <tr style="background: var(--navy-50);">
-              <td style="text-align: center; padding: 7px 4px;">
-                <strong style="font-size: 0.75em;">${row.time}</strong>
-              </td>
-              <td colspan="15" style="text-align: center; font-weight: 700; letter-spacing: 2px; color: var(--navy-700); font-size: 0.82em;">
-                LUNCH BREAK
-              </td>
-            </tr>
-          `;
+      TT.grid.forEach(row => {
+        const time = `<td class="time"><b>${row.time}</b>${row.end}</td>`;
+        if (row.lunch) {
+          html += `<tr class="lunch">${time}<td colspan="${days.length * 3}">LUNCH BREAK</td></tr>`;
           return;
         }
-
-        let rowHtml = `
-          <tr>
-            <td style="text-align: center; font-weight: 700; font-size: 0.72em; color: var(--color-text-muted); padding: 6px 4px; vertical-align: middle; white-space: nowrap; border-right: 2px solid var(--color-border);">
-              ${row.time}
-            </td>
-        `;
-
-        DAYS.forEach(day => {
-          const slotLetter = row[day];
-          const anCourse = anBlocks[day];
-          const consumedKey = `${day}-AN`;
-
-          if (anCourse && (row.isAN1 || row.isAN2)) {
-            if (row.isAN1) {
-              anRowSpanConsumed.add(consumedKey);
-              if (anCourse === 'SEM7_LAB') {
-                rowHtml += `
-                  <td rowspan="2" colspan="3" style="vertical-align: middle; background: rgba(245,158,11,0.05); border-left: 3px solid var(--amber-400); text-align: center; padding: 8px 6px;">
-                    <div style="font-weight: 700; font-size: 0.72em; color: var(--amber-600); margin-bottom: 4px;">LAB BLOCK (14:30–17:25)</div>
-                    <div style="margin-bottom: 4px;">${renderCourseChip({ code: 'ME3445', name: 'FEM Lab', room: 'LHC-7', seg: '1–3' })}</div>
-                    <div>${renderCourseChip({ code: 'ME3455', name: 'CFD Lab', room: 'LHC-7', seg: '4–6' })}</div>
-                  </td>
-                `;
-              } else {
-                rowHtml += `
-                  <td rowspan="2" colspan="3" style="vertical-align: middle; background: rgba(245,158,11,0.05); border-left: 3px solid var(--amber-400); padding: 6px;">
-                    <div style="font-weight: 700; font-size: 0.72em; color: var(--amber-600); margin-bottom: 4px;">LAB BLOCK</div>
-                    ${renderCourseChip(anCourse)}
-                  </td>
-                `;
-              }
+        let cells = '';
+        days.forEach(day => {
+          const lab = an[day];
+          if (lab && row.an) {
+            if (row.an === 1) {
+              cells += `<td class="day-start an-cell" colspan="3" rowspan="2">
+                <div class="an-label">AN · LAB BLOCK</div>
+                ${lab.map(c => chip(c, 'chip-an')).join('')}
+              </td>`;
             }
             return;
           }
-
-          if (!slotLetter || slotLetter === 'AN' || slotLetter === '') {
-            rowHtml += `
-              <td style="${TD_STYLE}">${EMPTY}</td>
-              <td style="${TD_STYLE}">${EMPTY}</td>
-              <td style="${TD_STYLE}">${EMPTY}</td>
-            `;
+          const letter = row[day];
+          if (!letter || letter === 'AN') {
+            cells += `<td class="day-start" colspan="3"><span class="slot-letter">${letter === 'AN' ? 'AN' : ''}</span></td>`;
             return;
           }
-
-          const sd = slotData[slotLetter] || null;
-          rowHtml += renderSegCells(sd);
+          cells += slotCells(slots[letter], letter);
         });
-
-        rowHtml += `</tr>`;
-        bodyHtml += rowHtml;
+        html += `<tr>${time}${cells}</tr>`;
       });
+      html += '</tbody>';
+      document.getElementById('tt').innerHTML = html;
+    }
 
-      document.getElementById('table-body').innerHTML = bodyHtml;
+    function creditValue(c) {
+      if (c.partOf) return 0;
+      if (typeof c.credits === 'number') return c.credits;
+      if (c.credits && typeof c.credits === 'object') return c.credits.value;
+      return 0;
+    }
 
-      // Render Unscheduled / Electives
-      const unsch = unscheduled[activeSem] || [];
-      if (unsch.length > 0) {
-        document.getElementById('unscheduled-container').innerHTML = `
-          <div style="margin-top: var(--space-6);">
-            <div class="eyebrow" style="margin-bottom: var(--space-3);">Additional / Elective Courses</div>
-            <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);">
-              ${unsch.map(c => `
-                <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); min-width: 160px;">
-                  <div style="font-weight: 700; font-size: 0.8em; color: var(--amber-600);">${c.code}</div>
-                  <div style="font-size: 0.85em; color: var(--color-text);">${c.name}</div>
-                  <div style="font-size: 0.75em; color: var(--color-text-muted);">${c.credits} credit${c.credits !== 1 ? 's' : ''}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
+    function renderCourses() {
+      const s = sem();
+      const rows = s.courses.map(c => `
+        <tr>
+          <td>${c.code ? `<span class="code">${esc(c.code)}</span>` : '<span class="code code-empty">—</span>'}</td>
+          <td>${esc(c.name)}</td>
+          <td>${c.slot ? `<span class="code">${esc(c.slot)}</span>` : '<span class="code-empty">—</span>'}</td>
+          <td>${c.seg ? `<span class="code">${segLabel(c.seg)}</span>` : '<span class="code-empty">—</span>'}</td>
+          <td>${c.room ? esc(c.room) : '<span class="code-empty">—</span>'}</td>
+          <td>${c.instructor ? esc(c.instructor) : '<span class="code-empty">—</span>'}</td>
+          <td class="num">${c.partOf ? '<span class="sub" style="margin:0">incl. above</span>' : creditValue(c)}</td>
+        </tr>`).join('');
+      document.getElementById('course-body').innerHTML = rows;
+      document.getElementById('course-total').textContent = s.courses.reduce((a, c) => a + creditValue(c), 0);
+
+      const note = document.getElementById('basket-note');
+      if (s.basket) {
+        const list = s.basket.courses.map(c => `<strong>${esc(c.code)}</strong> ${esc(c.name)} (slot ${esc(c.slot)}, ${esc(c.room)})`).join(', ');
+        note.innerHTML = `<div class="callout mt-md">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div><strong>${esc(s.basket.title)}:</strong> ${esc(s.basket.note)}. Offered this term: ${list}. It is shown on the grid above.</div>
+        </div>`;
       } else {
-        document.getElementById('unscheduled-container').innerHTML = '';
-      }
-
-      // Render Alert
-      if (activeSem === 'sem5') {
-        document.getElementById('alert-container').innerHTML = `
-          <div style="margin-top: var(--space-5); background: var(--amber-50); border: 1px solid var(--amber-300); border-radius: var(--radius-md); padding: var(--space-3) var(--space-5); font-size: var(--text-sm); color: var(--navy-800);">
-            ⚠️ Pick one course from the Parallel, Distributed &amp; HPC Basket (mandatory — either odd or even semester)
-          </div>
-        `;
-      } else {
-        document.getElementById('alert-container').innerHTML = '';
+        note.innerHTML = '';
       }
     }
 
-    data = TIMETABLES_DATA;
+    function render() {
+      const t = term();
+      if (!t.semesters.some(s => s.id === semId)) semId = t.semesters[0].id;
+      const s = sem();
+
+      document.getElementById('hero-sub').textContent = `${t.label} schedules on the IITH slot grid.`;
+      document.getElementById('term-tabs').innerHTML = TT.terms.map(x =>
+        `<button class="tab" role="tab" type="button" aria-selected="${x.id === termId}" data-term="${x.id}">${esc(x.label)}</button>`).join('');
+      document.getElementById('sem-tabs').innerHTML = t.semesters.map(x =>
+        `<button class="tab" role="tab" type="button" aria-selected="${x.id === s.id}" data-sem="${x.id}">Sem ${x.number}<span class="count">Batch ${x.batch}</span></button>`).join('');
+
+      document.getElementById('tt-title').textContent = `Semester ${s.number} · Batch ${s.batch}`;
+      document.getElementById('tt-meta').textContent = t.label;
+
+      const cal = document.getElementById('calendar-btn');
+      cal.hidden = !t.calendar;
+      if (t.calendar) cal.href = t.calendar;
+
+      renderGrid();
+      renderCourses();
+
+      const url = new URL(location.href);
+      url.searchParams.set('term', termId);
+      url.searchParams.set('sem', s.id);
+      history.replaceState(null, '', url);
+    }
+
+    document.getElementById('term-tabs').addEventListener('click', e => {
+      const b = e.target.closest('[data-term]');
+      if (b) { termId = b.dataset.term; render(); }
+    });
+    document.getElementById('sem-tabs').addEventListener('click', e => {
+      const b = e.target.closest('[data-sem]');
+      if (b) { semId = b.dataset.sem; render(); }
+    });
+
     render();
   </script>
 </body>
