@@ -9,7 +9,6 @@ const ICONS = {
   mail: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
   phone: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
   pin: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
-  arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
   up: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>',
 };
 
@@ -78,10 +77,10 @@ class SiteHeader extends HTMLElement {
       <a class="skip-link" href="#main">Skip to content</a>
       <div class="topbar">
         <div class="container">
-          <span class="topbar-meta">Department of Computational Engineering · Indian Institute of Technology Hyderabad</span>
+          <span class="topbar-meta">Department of Computational Engineering, Indian Institute of Technology Hyderabad</span>
           <span class="topbar-links">
             <a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a>
-            <a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">iith.ac.in ↗</a>
+            <a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">iith.ac.in</a>
           </span>
         </div>
       </div>
@@ -157,15 +156,6 @@ class SiteFooter extends HTMLElement {
     const year = new Date().getFullYear();
     this.innerHTML = `
       <footer class="site-footer">
-        <div class="footer-cta">
-          <div class="container">
-            <h2>Engineering, computed — at IIT Hyderabad.</h2>
-            <div class="btn-row">
-              <a class="btn btn-primary" href="curriculum.html">Explore the curriculum ${ICONS.arrow}</a>
-              <a class="btn btn-ghost-light" href="contact.html">Contact us</a>
-            </div>
-          </div>
-        </div>
         <div class="container footer-grid">
           <div>
             <div class="footer-brand">
@@ -198,7 +188,7 @@ class SiteFooter extends HTMLElement {
               <li><a href="students.html">Students</a></li>
               <li><a href="alumni.html">Alumni</a></li>
               <li><a href="internships_placements.html">Internships &amp; Placements</a></li>
-              <li><a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">IIT Hyderabad ↗</a></li>
+              <li><a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">IIT Hyderabad website</a></li>
             </ul>
           </div>
           <div>
@@ -206,14 +196,14 @@ class SiteFooter extends HTMLElement {
             <div class="footer-contact">
               <div>${ICONS.mail}<span><a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a><br><a href="mailto:dugc@co.iith.ac.in">dugc@co.iith.ac.in</a></span></div>
               <div>${ICONS.phone}<span>040-2301-6670</span></div>
-              <div>${ICONS.pin}<span>Near NH-65, Sangareddy, Kandi<br>Telangana, India — 502285</span></div>
+              <div>${ICONS.pin}<span>Near NH-65, Sangareddy, Kandi<br>Telangana 502285, India</span></div>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
           <div class="container">
             <span>© ${year} Computational Engineering Programme, IIT Hyderabad. All rights reserved.</span>
-            <a href="#top" class="back-top">Back to top ↑</a>
+            <a href="#top" class="back-top">Back to top</a>
           </div>
         </div>
       </footer>`;
@@ -228,33 +218,6 @@ class SiteFooter extends HTMLElement {
 customElements.define('site-header', SiteHeader);
 customElements.define('site-footer', SiteFooter);
 
-/* Fade elements marked [data-reveal] (and their [data-reveal-children]) into view. */
-function initReveal(root = document) {
-  const targets = [];
-  root.querySelectorAll('[data-reveal]').forEach(el => targets.push(el));
-  root.querySelectorAll('[data-reveal-children]').forEach(parent => {
-    [...parent.children].forEach((child, i) => {
-      child.style.transitionDelay = `${Math.min(i, 8) * 60}ms`;
-      targets.push(child);
-    });
-  });
-  if (!('IntersectionObserver' in window)) return;
-  const io = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
-  targets.forEach(el => {
-    if (el.classList.contains('revealed')) return;
-    el.classList.add('reveal');
-    io.observe(el);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => initReveal());
 
 /* Escape text before putting it in HTML strings. */
 function esc(value) {
