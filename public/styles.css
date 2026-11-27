@@ -634,6 +634,12 @@ site-footer { display: block; }
 }
 .hod-name { font-size: clamp(2rem, 4vw, 2.8rem); margin-top: .75rem; }
 .hod-title { font-size: 1.05rem; color: var(--accent-600); font-weight: 600; margin-top: .4rem; }
+.hod-message {
+  margin: 1.75rem 0 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--accent-500);
+  font-family: var(--font-display); font-style: italic; font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  line-height: 1.65; color: var(--text);
+}
+.hod-message p + p { margin-top: 1em; }
 .hod-dl { display: grid; gap: 0; margin-top: 2rem; border-top: 1px solid var(--line); }
 .hod-dl > div { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
 .hod-dl dt { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); padding-top: 3px; }
