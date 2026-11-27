@@ -37,7 +37,6 @@ function renderRoster({ batches, colors, initial, tabsEl, gridEl, searchEl }) {
       const name = titleCase(p.name);
       return `
         <div class="member">
-          <span class="avatar" style="--av:${colors[active] || 'var(--ink-700)'}" aria-hidden="true">${initials(p.name)}</span>
           <div class="member-info">
             <div class="member-name">${esc(name)}</div>
             ${p.email ? `<div class="member-email">${esc(p.email)}</div>` : ''}

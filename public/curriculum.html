@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Curriculum · Computational Engineering · IIT Hyderabad</title>
+  <title>Curriculum | Computational Engineering, IIT Hyderabad</title>
   <meta name="description" content="Semester-wise curriculum, credit distribution and department electives of the B.Tech in Computational Engineering at IIT Hyderabad.">
   <link rel="icon" href="./assets/images/iithlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,71 +18,71 @@
     <section class="page-hero">
       <div class="container">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Academics</span><span aria-hidden="true">/</span><span>Curriculum</span></nav>
-        <span class="eyebrow">B.Tech · Computational Engineering</span>
         <h1>Curriculum Structure</h1>
         <p>Our comprehensive B.Tech program in Computational Engineering integrates mathematics, core engineering, scientific computing, and emerging technologies to prepare students for industry challenges and advanced research.</p>
       </div>
     </section>
 
-    <!-- Overview + credits -->
+    <!-- Overview + baskets -->
     <section class="section">
       <div class="container">
-        <div class="split" style="align-items: start;">
-          <div data-reveal>
-            <span class="eyebrow">Program overview</span>
-            <h2 class="mt-sm" style="font-size: clamp(1.8rem, 3.4vw, 2.5rem);">Eight semesters, seven credit baskets</h2>
+        <div class="split">
+          <div>
+            <h2 class="h2">Program Overview</h2>
             <div class="prose mt-md">
               <p>Courses related to Engineering Mathematics are included to lay the foundation of mathematics that a student of this program is expected to know. Core Engineering courses cover fundamental topics of Engineering Drawing, Thermodynamics, and Mechanics of solids and fluids along with the transport of heat and mass through these mediums. As biology forms an important aspect of modern engineering, courses on bioengineering and biomechanics have also been included.</p>
               <p>Scientific Computing lays foundation of the numerical methods typically used in engineering modelling and simulation; Data Structure &amp; Analytics exposes the student to modern analysis tools of AI/ML and optimization; Computational Applications exposes the student to a vast array of methodology typically used in engineering analysis.</p>
             </div>
             <div class="btn-row mt-md">
-              <a href="./assets/files/IITH_BTECH_Flyer_Computational_Engg.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>
-                Course Flyer
-              </a>
-              <a href="./assets/files/IITH_BTECH_Detailed_Curriculum_Computation_Engg.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
-                Detailed Curriculum (PDF)
-              </a>
+              <a href="./assets/files/IITH_BTECH_Flyer_Computational_Engg.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Download course flyer (PDF)</a>
+              <a href="./assets/files/IITH_BTECH_Detailed_Curriculum_Computation_Engg.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Download detailed curriculum (PDF)</a>
             </div>
           </div>
 
-          <div class="card" data-reveal>
-            <span class="eyebrow">Credit distribution</span>
-            <div class="credit-total mt-sm">
-              <span class="big" id="total-credits">—</span>
-              <span class="muted">total credits</span>
+          <div>
+            <div class="credit-summary">
+              <span class="big" id="total-credits">&ndash;</span>
+              <span class="muted">credits to graduate, in seven baskets</span>
             </div>
-            <div class="credit-bar" id="credit-bar" role="img" aria-label="Credits per basket"></div>
-            <div class="credit-legend" id="credit-legend"></div>
-            <p class="muted mt-md" style="font-size: .82rem;">Per basket, summed from the semester plan below.</p>
+            <div class="table-wrap mt-md">
+              <table class="table">
+                <thead><tr><th></th><th>Basket</th><th class="num">Share</th><th class="num">Credits</th></tr></thead>
+                <tbody id="basket-body"></tbody>
+                <tfoot><tr><td></td><td>Total</td><td></td><td class="num" id="basket-total"></td></tr></tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Semesters -->
-    <section class="section section-alt" id="semesters">
+    <!-- Credit map -->
+    <section class="section" id="semesters">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">Semester-wise curriculum</span>
-          <h2>Semester by semester</h2>
-          <p>Courses and credits for each semester, as offered in the July–November 2026 and January–April 2027 time tables.</p>
+          <h2>Semester-wise Curriculum</h2>
+          <p>Each row is a semester and each block a course, drawn as wide as its credits on a common scale. Select a semester to list its courses.</p>
         </div>
-        <div id="years"></div>
+        <div class="cmap-tools">
+          <div class="cmap-legend" id="cmap-legend"></div>
+          <button class="btn btn-outline btn-sm" type="button" id="toggle-all">Show all courses</button>
+        </div>
+        <div class="cmap-scroll">
+          <div class="cmap-inner" id="cmap"></div>
+        </div>
+        <p class="muted small mt-md">Hatched blocks are credit baskets filled by electives, internships or the HPC basket. Courses as offered in the July&ndash;November 2026 and January&ndash;April 2027 time tables.</p>
       </div>
     </section>
 
     <!-- HPC basket -->
     <section class="section" id="hpc-basket">
       <div class="container">
-        <div class="split" style="align-items: start;">
-          <div data-reveal>
-            <span class="eyebrow">Mandatory basket · 3 credits</span>
-            <h2 class="mt-sm" style="font-size: clamp(1.8rem, 3.4vw, 2.5rem);">Parallel, Distributed &amp; HPC Basket</h2>
-            <p class="lede mt-md">Every student must pick one course from this basket, in either the odd or the even semester of the third year.</p>
+        <div class="split">
+          <div>
+            <h2 class="h2">Parallel, Distributed &amp; HPC Basket</h2>
+            <p class="lede mt-md">Every student must pick one 3-credit course from this basket, in either the odd or the even semester of the third year.</p>
           </div>
-          <div class="table-wrap" data-reveal>
+          <div class="table-wrap">
             <table class="table">
               <thead><tr><th>Code</th><th>Course</th><th>Offered</th><th class="num">Credits</th></tr></thead>
               <tbody id="hpc-body"></tbody>
@@ -96,7 +96,6 @@
     <section class="section section-alt" id="electives">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">Department electives</span>
           <h2>Electives offered</h2>
           <p>Department electives (DE) carry 17 credits across semesters 6–8. These are the electives offered this academic year.</p>
         </div>
@@ -221,62 +220,67 @@
     const grand = Object.values(totals).reduce((a, b) => a + b, 0);
 
     document.getElementById('total-credits').textContent = grand;
-    document.getElementById('credit-bar').innerHTML = Object.entries(totals)
-      .map(([k, v]) => `<span style="--seg:${BASKETS[k].color}; flex:${v}" title="${k} · ${BASKETS[k].name}: ${v} credits"></span>`)
-      .join('');
-    document.getElementById('credit-legend').innerHTML = Object.entries(totals)
-      .map(([k, v]) => `
-        <div class="credit-legend-row">
-          <span class="tag-dot" style="--tag:${BASKETS[k].color}"></span>
-          <span class="label">${BASKETS[k].name}<small>${k}</small></span>
-          <span class="pct">${Math.round((v / grand) * 100)}%</span>
-          <span class="val">${v}</span>
-        </div>`)
-      .join('');
+    document.getElementById('basket-total').textContent = grand;
+    document.getElementById('basket-body').innerHTML = Object.entries(totals).map(([k, v]) => `
+      <tr>
+        <td><span class="swatch" style="--tag:${BASKETS[k].color}"></span></td>
+        <td>${BASKETS[k].name} <span class="muted">(${k})</span></td>
+        <td class="num muted">${Math.round((v / grand) * 100)}%</td>
+        <td class="num"><strong>${v}</strong></td>
+      </tr>`).join('');
 
-    // ── Semester cards ──
-    const yearsEl = document.getElementById('years');
-    const ordinal = ['First', 'Second', 'Third', 'Fourth'];
-    for (let y = 0; y < 4; y++) {
-      const pair = SEMESTERS.slice(y * 2, y * 2 + 2);
-      const yearTotal = pair.reduce((a, s) => a + s.total, 0);
-      const cards = pair.map(s => {
-        const bar = Object.keys(BASKETS)
-          .map(k => {
-            const v = s.courses.filter(c => c[3] === k).reduce((a, c) => a + num(c[2]), 0);
-            return v ? `<span style="--seg:${BASKETS[k].color}; flex:${v}"></span>` : '';
-          }).join('');
-        const rows = s.courses.map(([code, name, cr, type, sub, basket]) => `
-          <li class="course-row${basket ? ' is-basket' : ''}">
-            <span class="code${code ? '' : ' code-empty'}">${code || '—'}</span>
-            <span class="name">${esc(name)}${sub ? `<small>${esc(sub)}</small>` : ''}</span>
-            <span class="tag tag-${type}" title="${BASKETS[type].name}">${type}</span>
-            <span class="cr">${fmt(cr)}</span>
-          </li>`).join('');
-        return `
-          <article class="card sem-card" data-reveal>
-            <div class="sem-head">
-              <div>
-                <h4>Semester ${s.n}</h4>
-                <div class="term">${s.term}</div>
-              </div>
-              <div class="sem-credits"><b>${s.total}</b><span>credits</span></div>
-            </div>
-            <div class="sem-mini-bar">${bar}</div>
-            <ul class="course-list" role="list">${rows}</ul>
-            ${s.note ? `<div class="sem-note">${esc(s.note)}</div>` : ''}
-          </article>`;
-      }).join('');
-      yearsEl.insertAdjacentHTML('beforeend', `
-        <div class="year-block">
-          <div class="year-label">
-            <h3>${ordinal[y]} year</h3>
-            <span class="rule"></span>
-            <span class="meta">${yearTotal} credits</span>
+    // Credit map
+    const SCALE = 20;
+    document.getElementById('cmap-legend').innerHTML = Object.entries(BASKETS)
+      .map(([k, b]) => `<span><span class="swatch" style="--tag:${b.color}"></span>${k}</span>`).join('');
+
+    const ticks = [0, 5, 10, 15, 20].map(t => `<span style="left:${(t / SCALE) * 100}%">${t}</span>`).join('');
+    const chevron = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
+    const rowsHtml = SEMESTERS.map(s => {
+      const blocks = s.courses.filter(c => num(c[2]) > 0).map(([code, name, cr, type, sub, basket]) => `
+        <span class="cblock${basket ? ' is-basket' : ''}" style="--tag:${BASKETS[type].color}; grid-column: span ${cr}" title="${esc(code ? code + ' ' : '')}${esc(name)}: ${cr} credit${cr === 1 ? '' : 's'} (${BASKETS[type].name})">
+          <b>${esc(code || type)}</b><span>${esc(name)}</span>
+        </span>`).join('');
+      const table = s.courses.map(([code, name, cr, type, sub]) => `
+        <tr>
+          <td>${code ? `<span class="code">${esc(code)}</span>` : '<span class="code-empty">&ndash;</span>'}</td>
+          <td>${esc(name)}${sub ? `<span class="sub">${esc(sub)}</span>` : ''}</td>
+          <td><span class="tag tag-${type}" title="${BASKETS[type].name}">${type}</span></td>
+          <td class="num">${fmt(cr)}</td>
+        </tr>`).join('');
+      return `
+        <details class="sem-row">
+          <summary>
+            <span class="sem-label">${chevron}<span><b>Semester ${s.n}</b><small>${s.term}</small></span></span>
+            <span class="cmap-bar">${blocks}</span>
+            <span class="sem-total">${s.total}</span>
+          </summary>
+          <div class="sem-detail">
+            <table class="table">
+              <thead><tr><th>Code</th><th>Course</th><th>Basket</th><th class="num">Credits</th></tr></thead>
+              <tbody>${table}</tbody>
+            </table>
+            ${s.note ? `<p class="sem-note">${esc(s.note)}</p>` : ''}
           </div>
-          <div class="grid grid-2">${cards}</div>
-        </div>`);
-    }
+        </details>`;
+    }).join('');
+
+    document.getElementById('cmap').innerHTML = `
+      <div class="cmap-axis" aria-hidden="true">
+        <span class="end"></span>
+        <span class="cmap-ticks">${ticks}</span>
+        <span class="end">credits</span>
+      </div>
+      ${rowsHtml}`;
+
+    const toggleAll = document.getElementById('toggle-all');
+    toggleAll.addEventListener('click', () => {
+      const rows = [...document.querySelectorAll('.sem-row')];
+      const open = !rows.every(r => r.open);
+      rows.forEach(r => { r.open = open; });
+      toggleAll.textContent = open ? 'Hide all courses' : 'Show all courses';
+    });
 
     // ── Electives (from the time table data) ──
     const TT = window.TIMETABLES;
@@ -304,7 +308,7 @@
         const extra = /additional/i.test(g.title);
         LISTS.push({
           id: `${t.id}-${extra ? 'extra' : 'de'}`,
-          label: extra ? `Additional · ${t.short}` : t.short,
+          label: extra ? `Additional, ${t.short}` : t.short,
           foot: extra
             ? `Additional electives that may also be taken, offered in ${t.label}.`
             : `Department electives offered in ${t.label}.`,
