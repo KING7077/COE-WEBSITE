@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Time Tables | Computational Engineering, IIT Hyderabad</title>
+  <title>Time Tables · Computational Engineering · IIT Hyderabad</title>
   <meta name="description" content="Weekly time tables for every semester of the B.Tech in Computational Engineering at IIT Hyderabad.">
   <link rel="icon" href="./assets/images/iithlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,9 +18,10 @@
     <section class="page-hero">
       <div class="container">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Academics</span><span aria-hidden="true">/</span><span>Time Tables</span></nav>
+        <span class="eyebrow">Weekly schedules</span>
         <h1>Time Tables</h1>
         <p id="hero-sub">Semester schedules on the IITH slot grid.</p>
-        <div class="tabs mt-lg" role="tablist" id="term-tabs" aria-label="Academic term"></div>
+        <div class="tabs tabs-dark mt-md" role="tablist" id="term-tabs" aria-label="Academic term"></div>
       </div>
     </section>
 
@@ -45,8 +46,8 @@
           <table class="tt" id="tt"></table>
         </div>
         <div class="legend-segs">
-          <span>Each day is split into segment pairs 1–2, 3–4 and 5–6 of the semester; a course running across several segments spans them.</span>
-          <span>Afternoon lab blocks run 14:30–17:25.</span>
+          <span>Each day is split into segment pairs <b>1–2</b>, <b>3–4</b>, <b>5–6</b> of the semester; a course spanning several segments is merged across them.</span>
+          <span><b>AN</b> = afternoon lab block (14:30–17:25).</span>
         </div>
 
         <div id="basket-note"></div>
@@ -59,7 +60,7 @@
             <tfoot><tr><td colspan="6">Total credits</td><td class="num" id="course-total"></td></tr></tfoot>
           </table>
         </div>
-        <p class="muted mt-sm" style="font-size: .85rem;">Department electives offered this term are listed on the <a class="link" href="curriculum.html#electives">curriculum page</a>.</p>
+        <p class="muted mt-sm" style="font-size: .85rem;">Department electives offered this term are listed on the <a class="link-arrow" href="curriculum.html#electives">curriculum page</a>.</p>
       </div>
     </section>
   </main>
@@ -70,7 +71,7 @@
   <script src="data/timetables.js"></script>
   <script>
     const TT = window.TIMETABLES;
-    const PALETTE = ['#4b03a1', '#b12a90', '#2850b8', '#0b7a70', '#b04716', '#7e03a8', '#12284a', '#9c2f80', '#846812', '#5b6474'];
+    const PALETTE = ['#e3662a', '#2f6fb0', '#138a7e', '#8f5bc0', '#c4457e', '#6a7f2c', '#d48a1c', '#34496a', '#0f7aa8', '#9b4d2e'];
     const PAIRS = [['s12', 1, 2], ['s34', 3, 4], ['s56', 5, 6]];
 
     const segRange = seg => {
@@ -101,7 +102,7 @@
       return `<div class="chip ${extra}" style="--chip:${c.color}" title="${esc(c.name)}${c.instructor ? ' — ' + esc(c.instructor) : ''}">
         <span class="chip-code">${esc(c.code)}</span>
         <span class="chip-name">${esc(c.name)}</span>
-        <span class="chip-meta">${[c.room, c.seg ? 'seg ' + segLabel(c.seg) : ''].filter(Boolean).map(esc).join(', ')}</span>
+        <span class="chip-meta">${[c.room, c.seg ? 'Seg ' + segLabel(c.seg) : ''].filter(Boolean).map(esc).join(' · ')}</span>
       </div>`;
     }
 
@@ -164,7 +165,7 @@
       TT.grid.forEach(row => {
         const time = `<td class="time"><b>${row.time}</b>${row.end}</td>`;
         if (row.lunch) {
-          html += `<tr class="lunch">${time}<td colspan="${days.length * 3}">Lunch break</td></tr>`;
+          html += `<tr class="lunch">${time}<td colspan="${days.length * 3}">LUNCH BREAK</td></tr>`;
           return;
         }
         let cells = '';
@@ -173,7 +174,7 @@
           if (lab && row.an) {
             if (row.an === 1) {
               cells += `<td class="day-start an-cell" colspan="3" rowspan="2">
-                <div class="an-label">Lab block</div>
+                <div class="an-label">AN · LAB BLOCK</div>
                 ${lab.map(c => chip(c, 'chip-an')).join('')}
               </td>`;
             }
@@ -217,7 +218,9 @@
       const note = document.getElementById('basket-note');
       if (s.basket) {
         const list = s.basket.courses.map(c => `<strong>${esc(c.code)}</strong> ${esc(c.name)} (slot ${esc(c.slot)}, ${esc(c.room)})`).join(', ');
-        note.innerHTML = `<div class="callout mt-md"><div><strong>${esc(s.basket.title)}:</strong> ${esc(s.basket.note)}. Offered this term: ${list}. It is shown on the grid above.</div>
+        note.innerHTML = `<div class="callout mt-md">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div><strong>${esc(s.basket.title)}:</strong> ${esc(s.basket.note)}. Offered this term: ${list}. It is shown on the grid above.</div>
         </div>`;
       } else {
         note.innerHTML = '';
@@ -235,7 +238,7 @@
       document.getElementById('sem-tabs').innerHTML = t.semesters.map(x =>
         `<button class="tab" role="tab" type="button" aria-selected="${x.id === s.id}" data-sem="${x.id}">Sem ${x.number}<span class="count">Batch ${x.batch}</span></button>`).join('');
 
-      document.getElementById('tt-title').textContent = `Semester ${s.number}, Batch ${s.batch}`;
+      document.getElementById('tt-title').textContent = `Semester ${s.number} · Batch ${s.batch}`;
       document.getElementById('tt-meta').textContent = t.label;
 
       const cal = document.getElementById('calendar-btn');

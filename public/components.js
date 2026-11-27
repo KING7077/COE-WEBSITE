@@ -39,7 +39,6 @@ const NAV = [
     ],
   },
   { label: 'Internships & Placements', href: 'internships_placements.html' },
-  { label: 'Contact', href: 'contact.html' },
 ];
 
 function currentPage() {
@@ -77,6 +76,15 @@ class SiteHeader extends HTMLElement {
 
     this.innerHTML = `
       <a class="skip-link" href="#main">Skip to content</a>
+      <div class="topbar">
+        <div class="container">
+          <span class="topbar-meta">Department of Computational Engineering · Indian Institute of Technology Hyderabad</span>
+          <span class="topbar-links">
+            <a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a>
+            <a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">iith.ac.in ↗</a>
+          </span>
+        </div>
+      </div>
       <header class="site-header" id="top">
         <div class="container">
           <a href="index.html" class="brand" aria-label="Computational Engineering, IIT Hyderabad — Home">
@@ -88,12 +96,14 @@ class SiteHeader extends HTMLElement {
           </a>
           <nav class="site-nav" id="site-nav" aria-label="Main navigation">
             <ul class="nav-list">${items}</ul>
+            <div class="nav-cta"><a class="btn btn-dark btn-sm" href="contact.html">Contact</a></div>
           </nav>
           <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">${ICONS.menu}</button>
         </div>
       </header>`;
 
-    // Let the inner <header> stick to the viewport rather than to this element.
+    // The header sits after the topbar; make the custom element itself non-sticky
+    // so the inner <header> can stick to the viewport.
     this.style.display = 'contents';
 
     const header = this.querySelector('.site-header');
@@ -110,7 +120,10 @@ class SiteHeader extends HTMLElement {
       }
     });
 
-    
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
     const setOpen = open => {
       nav.classList.toggle('open', open);
       document.body.classList.toggle('nav-open', open);
@@ -144,13 +157,22 @@ class SiteFooter extends HTMLElement {
     const year = new Date().getFullYear();
     this.innerHTML = `
       <footer class="site-footer">
+        <div class="footer-cta">
+          <div class="container">
+            <h2>Engineering, computed — at IIT Hyderabad.</h2>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="curriculum.html">Explore the curriculum ${ICONS.arrow}</a>
+              <a class="btn btn-ghost-light" href="contact.html">Contact us</a>
+            </div>
+          </div>
+        </div>
         <div class="container footer-grid">
           <div>
             <div class="footer-brand">
               <img src="./assets/images/iithlogo.png" alt="" width="44" height="44" />
               <div>
                 <b>Computational Engineering</b>
-                <span>IIT Hyderabad</span>
+                <span>Indian Institute of Technology Hyderabad</span>
               </div>
             </div>
             <p class="footer-about">India's first undergraduate programme dedicated to computational engineering, launched at IIT Hyderabad in 2021.</p>
@@ -176,22 +198,22 @@ class SiteFooter extends HTMLElement {
               <li><a href="students.html">Students</a></li>
               <li><a href="alumni.html">Alumni</a></li>
               <li><a href="internships_placements.html">Internships &amp; Placements</a></li>
-              <li><a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">IIT Hyderabad website</a></li>
+              <li><a href="https://www.iith.ac.in/" target="_blank" rel="noopener noreferrer">IIT Hyderabad ↗</a></li>
             </ul>
           </div>
           <div>
             <div class="footer-h">Contact</div>
             <div class="footer-contact">
-              <div><span><a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a><br><a href="mailto:dugc@co.iith.ac.in">dugc@co.iith.ac.in</a></span></div>
-              <div><span>040-2301-6670</span></div>
-              <div><span>Near NH-65, Sangareddy, Kandi<br>Telangana 502285, India</span></div>
+              <div>${ICONS.mail}<span><a href="mailto:head@co.iith.ac.in">head@co.iith.ac.in</a><br><a href="mailto:dugc@co.iith.ac.in">dugc@co.iith.ac.in</a></span></div>
+              <div>${ICONS.phone}<span>040-2301-6670</span></div>
+              <div>${ICONS.pin}<span>Near NH-65, Sangareddy, Kandi<br>Telangana, India — 502285</span></div>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
           <div class="container">
             <span>© ${year} Computational Engineering Programme, IIT Hyderabad. All rights reserved.</span>
-            <a href="#top" class="back-top">Back to top</a>
+            <a href="#top" class="back-top">Back to top ↑</a>
           </div>
         </div>
       </footer>`;
@@ -206,6 +228,33 @@ class SiteFooter extends HTMLElement {
 customElements.define('site-header', SiteHeader);
 customElements.define('site-footer', SiteFooter);
 
+/* Fade elements marked [data-reveal] (and their [data-reveal-children]) into view. */
+function initReveal(root = document) {
+  const targets = [];
+  root.querySelectorAll('[data-reveal]').forEach(el => targets.push(el));
+  root.querySelectorAll('[data-reveal-children]').forEach(parent => {
+    [...parent.children].forEach((child, i) => {
+      child.style.transitionDelay = `${Math.min(i, 8) * 60}ms`;
+      targets.push(child);
+    });
+  });
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+  targets.forEach(el => {
+    if (el.classList.contains('revealed')) return;
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => initReveal());
 
 /* Escape text before putting it in HTML strings. */
 function esc(value) {

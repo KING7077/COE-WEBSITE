@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About CO | Computational Engineering, IIT Hyderabad</title>
+  <title>About CO · Computational Engineering · IIT Hyderabad</title>
   <meta name="description" content="Why Computational Engineering, and what the programme at IIT Hyderabad offers.">
   <link rel="icon" href="./assets/images/iithlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,6 +18,7 @@
     <section class="page-hero">
       <div class="container">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>About CO</span></nav>
+        <span class="eyebrow">About the programme</span>
         <h1>Computational Engineering</h1>
         <p>Bridging the gap between traditional engineering education and the computational demands of modern industry.</p>
       </div>
@@ -27,19 +28,28 @@
     <section class="section">
       <div class="container">
         <div class="split">
-          <div>
-            <h2 class="h2">Need for Computational Engineering</h2>
+          <div data-reveal>
+            <span class="eyebrow">The need</span>
+            <h2 class="mt-sm" style="font-size: clamp(1.8rem, 3.4vw, 2.5rem);">Need for Computational Engineering</h2>
             <div class="prose mt-md">
               <p>Modern engineering challenges are defined by their complexity, scale, and the volume of data they generate. As a result, traditional experimental and analytical approaches, while being foundational, are often no longer sufficient on their own for designing, optimizing, and operating today's advanced systems. Whether it's developing next-generation vehicles, designing resilient infrastructure or innovating in healthcare, engineers now rely on advanced computational tools and techniques to model, simulate, and analyze complex systems. Utilizing sophisticated algorithms, high-performance computing, and data-driven methods has become essential for achieving meaningful progress in these fields.</p>
               <p>Computational Engineering addresses this critical need by integrating mathematical modeling, scientific computing, and data-driven methods into the engineering workflow. This enables engineers to:</p>
             </div>
           </div>
-          <dl class="def-list stacked">
-            <div><dt>Optimize predictive analysis</dt><dd>Simulate real-world behavior of systems under diverse conditions, leading to better-informed decisions and improved reliability. As an add on, rapid prototyping and testing designs virtually, reduces development time and costs.</dd></div>
-            <div><dt>Optimize performance</dt><dd>Use advanced algorithms and optimization techniques to refine system performance and resource efficiency.</dd></div>
-          </dl>
+          <div class="grid" data-reveal-children>
+            <div class="card feature">
+              <span class="icon-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>
+              <h3>Optimize predictive analysis</h3>
+              <p>Simulate real-world behavior of systems under diverse conditions, leading to better-informed decisions and improved reliability. As an add on, rapid prototyping and testing designs virtually, reduces development time and costs.</p>
+            </div>
+            <div class="card feature">
+              <span class="icon-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
+              <h3>Optimize performance</h3>
+              <p>Use advanced algorithms and optimization techniques to refine system performance and resource efficiency.</p>
+            </div>
+          </div>
         </div>
-        <p class="lede mt-lg">
+        <p class="lede mt-lg" style="max-width: 70ch;" data-reveal>
           As industries move towards digital-first strategies, the demand for engineers skilled in computational modeling, simulation, and analytics continues to grow. Computational Engineering is thus central to the future of research, innovation, and industrial competitiveness.
         </p>
       </div>
@@ -49,25 +59,26 @@
     <section class="section section-alt">
       <div class="container">
         <div class="section-head">
-          <h2>CO at IIT Hyderabad</h2>
+          <span class="eyebrow">CO at IIT Hyderabad</span>
+          <h2>Program structure</h2>
           <p>The Computational Engineering programme at IIT Hyderabad is dedicated to preparing students for this evolving landscape. This undergrad program blends the power of computational analysis, data structures and analytics, applied math, and core engineering disciplines to solve real-world problems. With this, the program emphasizes a strong foundation in mathematical analysis, numerical methods, scientific computing, and high-performance computing integrated with comprehensive exposure to core engineering areas such as mechanics, material sciences, biomed, and biotech.</p>
         </div>
-        <div class="plain-cols">
-          <div>
+        <div class="grid grid-4 numbered" data-reveal-children>
+          <div class="card">
             <h3>Core Foundations</h3>
-            <p>In-depth training in applied mathematics, numerical analysis, optimization, and programming, supporting modeling, simulation, and analysis of complex systems.</p>
+            <p class="muted mt-sm">In-depth training in applied mathematics, numerical analysis, optimization, and programming, supporting modeling, simulation, and analysis of complex systems.</p>
           </div>
-          <div>
+          <div class="card">
             <h3>Engineering Integration</h3>
-            <p>Essential engineering courses are enhanced with computational methods, bridging theory and real-world application.</p>
+            <p class="muted mt-sm">Essential engineering courses are enhanced with computational methods, bridging theory and real-world application.</p>
           </div>
-          <div>
+          <div class="card">
             <h3>Specialized Electives</h3>
-            <p>Advanced elective courses allow students to focus on topics such as computational fluid dynamics, uncertainty quantification, deep learning for engineering, computational materials, and biomedical modeling.</p>
+            <p class="muted mt-sm">Advanced elective courses allow students to focus on topics such as computational fluid dynamics, uncertainty quantification, deep learning for engineering, computational materials, and biomedical modeling.</p>
           </div>
-          <div>
+          <div class="card">
             <h3>Project-Driven Learning</h3>
-            <p>Hands-on projects, industry internships, and research experiences, concluding with a comprehensive project which could potentially focus on real engineering issues.</p>
+            <p class="muted mt-sm">Hands-on projects, industry internships, and research experiences, concluding with a comprehensive project which could potentially focus on real engineering issues.</p>
           </div>
         </div>
       </div>
@@ -77,16 +88,17 @@
     <section class="section">
       <div class="container">
         <div class="split">
-          <div>
-            <h2 class="h2">Why CO at IIT Hyderabad</h2>
-            <dl class="def-list mt-md">
-              <div><dt>Interdisciplinary Focus</dt><dd>The curriculum is designed to overcome traditional disciplinary boundaries, enabling students to address complex, cross-domain problems.</dd></div>
-              <div><dt>Global Connections</dt><dd>IIT Hyderabad has strong international collaborations with leading universities and research institutes, providing students with opportunities for global exposure, joint projects, and exchange programs.</dd></div>
-              <div><dt>Flexibility and Depth</dt><dd>A balanced mix of core courses and electives allows students to develop both breadth and depth in computational engineering.</dd></div>
-              <div><dt>Rapid Growth and Legacy of Innovation</dt><dd>As one of the fastest-growing IITs, IIT Hyderabad is recognized for its dynamic academic environment, cutting-edge research, and state-of-the-art facilities. Built on a foundation of pioneering research and creative problem-solving, this program symbolizes the institute's drive to set new benchmarks and deliver solutions that make a lasting difference in society.</dd></div>
+          <div data-reveal>
+            <span class="eyebrow">Why choose us</span>
+            <h2 class="mt-sm" style="font-size: clamp(1.8rem, 3.4vw, 2.5rem);">Why CO at IIT Hyderabad</h2>
+            <dl class="hod-dl" style="margin-top: 1.5rem;">
+              <div><dt>01</dt><dd><strong>Interdisciplinary Focus</strong><br>The curriculum is designed to overcome traditional disciplinary boundaries, enabling students to address complex, cross-domain problems.</dd></div>
+              <div><dt>02</dt><dd><strong>Global Connections</strong><br>IIT Hyderabad has strong international collaborations with leading universities and research institutes, providing students with opportunities for global exposure, joint projects, and exchange programs.</dd></div>
+              <div><dt>03</dt><dd><strong>Flexibility and Depth</strong><br>A balanced mix of core courses and electives allows students to develop both breadth and depth in computational engineering.</dd></div>
+              <div><dt>04</dt><dd><strong>Rapid Growth and Legacy of Innovation</strong><br>As one of the fastest-growing IITs, IIT Hyderabad is recognized for its dynamic academic environment, cutting-edge research, and state-of-the-art facilities. Built on a foundation of pioneering research and creative problem-solving, this program symbolizes the institute's drive to set new benchmarks and deliver solutions that make a lasting difference in society.</dd></div>
             </dl>
           </div>
-          <div class="photo-pair">
+          <div class="photo-stack" data-reveal>
             <div class="photo photo-tall"><img src="./assets/images/arch_1.jpg" alt="IIT Hyderabad architecture" loading="lazy"></div>
             <div class="photo"><img src="./assets/images/guest.jpg" alt="IIT Hyderabad guest house" loading="lazy"></div>
           </div>
@@ -98,20 +110,21 @@
     <section class="section section-dark">
       <div class="container">
         <div class="section-head">
-          <h2>Career and Academic Prospects</h2>
+          <span class="eyebrow">Career and academic prospects</span>
+          <h2>Where graduates go</h2>
         </div>
-        <div class="plain-cols">
+        <div class="grid grid-3" data-reveal-children>
           <div>
-            <h3>Industry</h3>
-            <p>Graduates are prepared for a wide range of opportunities in simulation and digital twin development, data-driven engineering design, and computational analysis across sectors like manufacturing, energy, aerospace, and healthcare.</p>
+            <h3 style="font-size: 1.2rem;">Industry</h3>
+            <p class="mt-sm">Graduates are prepared for a wide range of opportunities in simulation and digital twin development, data-driven engineering design, and computational analysis across sectors like manufacturing, energy, aerospace, and healthcare.</p>
           </div>
           <div>
-            <h3>Computing &amp; AI</h3>
-            <p>Their strong background in computational methods and software tools also opens doors to roles in high-performance computing, data analytics, and AI for engineering systems.</p>
+            <h3 style="font-size: 1.2rem;">Computing &amp; AI</h3>
+            <p class="mt-sm">Their strong background in computational methods and software tools also opens doors to roles in high-performance computing, data analytics, and AI for engineering systems.</p>
           </div>
           <div>
-            <h3>Research &amp; Higher Studies</h3>
-            <p>In addition to immediate industry opportunities, the program offers an excellent foundation for further studies. Graduates are well-suited for advanced degrees and research in computational science, applied math, and interdisciplinary fields, positioning them for impactful careers in both industry and academia.</p>
+            <h3 style="font-size: 1.2rem;">Research &amp; Higher Studies</h3>
+            <p class="mt-sm">In addition to immediate industry opportunities, the program offers an excellent foundation for further studies. Graduates are well-suited for advanced degrees and research in computational science, applied math, and interdisciplinary fields, positioning them for impactful careers in both industry and academia.</p>
           </div>
         </div>
       </div>
