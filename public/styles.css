@@ -45,8 +45,8 @@
   --c-sk: #c4457e;
   --c-fe: #6a7f2c;
 
-  --font-display: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
-  --font-sans: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --font-display: 'Roboto', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-sans: 'Roboto', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
 
   --radius-sm: 6px;
   --radius: 10px;
@@ -331,7 +331,7 @@ site-footer { display: block; }
   .nav-cta .btn { width: 100%; }
   body.nav-open { overflow: hidden; }
 }
-@media (max-width: 420px) { .brand-sub { display: none; } .brand-name { font-size: clamp(.82rem, 3.6vw, 1rem); letter-spacing: -.02em; } }
+@media (max-width: 420px) { .brand-sub { display: none; } .brand-name { font-size: 1.05rem; } }
 
 /* ── Page hero (inner pages) ──────────────────────────────────────────── */
 .page-hero {
